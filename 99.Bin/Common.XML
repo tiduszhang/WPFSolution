@@ -1,0 +1,1391 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Common</name>
+    </assembly>
+    <members>
+        <member name="T:Common.GZipCompress">
+            <summary>
+            Zip压缩包处理-文件夹压缩解压缩处理
+            注意：本压缩规则采用非标准Zip规则
+            </summary>
+        </member>
+        <member name="M:Common.GZipCompress.#ctor">
+            <summary>
+            构造函数
+            </summary>
+        </member>
+        <member name="P:Common.GZipCompress.DirPath">
+            <summary>
+            压缩时为需要压缩的文件夹，解压缩时是解压到的文件夹，需要绝对路径
+            </summary>
+        </member>
+        <member name="P:Common.GZipCompress.ZipFileName">
+            <summary>
+            压缩式是输出文件名，解压缩时是输入文件名，需要绝对路径
+            </summary>
+        </member>
+        <member name="P:Common.GZipCompress.Message">
+            <summary>
+            执行消息
+            </summary>
+        </member>
+        <member name="F:Common.GZipCompress.bufferSize">
+            <summary>
+            处理文件分块大小
+            </summary>
+        </member>
+        <member name="M:Common.GZipCompress.Compress">
+            <summary>
+            对目标文件夹进行压缩，将压缩结果保存为指定文件
+            </summary> 
+        </member>
+        <member name="M:Common.GZipCompress.DeCompress">
+            <summary>
+            对目标压缩文件解压缩，将内容解压缩到指定文件夹
+            </summary> 
+        </member>
+        <member name="T:Common.SerializeFileInfo">
+            <summary>
+            文件序列化信息
+            </summary>
+        </member>
+        <member name="F:Common.SerializeFileInfo.fileName">
+            <summary>
+            文件名
+            </summary>
+        </member>
+        <member name="P:Common.SerializeFileInfo.FileName">
+            <summary>
+            文件名
+            </summary>
+        </member>
+        <member name="F:Common.SerializeFileInfo.fileBuffer">
+            <summary>
+            文件内容
+            </summary>
+        </member>
+        <member name="P:Common.SerializeFileInfo.FileBuffer">
+            <summary>
+            文件内容
+            </summary>
+        </member>
+        <member name="F:Common.SerializeFileInfo.path">
+            <summary>
+            文件相对路径
+            </summary>
+        </member>
+        <member name="P:Common.SerializeFileInfo.Path">
+            <summary>
+            文件相对路径
+            </summary>
+        </member>
+        <member name="F:Common.SerializeFileInfo.type">
+            <summary>
+            文件相对路径
+            </summary>
+        </member>
+        <member name="P:Common.SerializeFileInfo.Type">
+            <summary>
+            文件相对路径
+            </summary>
+        </member>
+        <member name="M:Common.SerializeFileInfo.LoadFile(System.String,Common.SerializeFileInfo.SerializeFileInfoType)">
+            <summary>
+            加载文件
+            </summary>
+            <param name="filepath"></param>
+            <param name="Type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.SerializeFileInfo.SaveAs(System.String)">
+            <summary>
+            将文件内容保存到指定目录
+            </summary>
+            <param name="dirPath"></param>
+        </member>
+        <member name="T:Common.SerializeFileInfo.SerializeFileInfoType">
+            <summary>
+            压缩文件内容信息类型
+            </summary>
+        </member>
+        <member name="F:Common.SerializeFileInfo.SerializeFileInfoType.File">
+            <summary>
+            文件类型
+            </summary>
+        </member>
+        <member name="F:Common.SerializeFileInfo.SerializeFileInfoType.Directory">
+            <summary>
+            文件夹类型
+            </summary>
+        </member>
+        <member name="T:Common.SerializeFileInfoExtensions">
+            <summary>
+            序列化文件信息扩展类
+            </summary>
+        </member>
+        <member name="M:Common.SerializeFileInfoExtensions.ToStream``1(System.Collections.Generic.List{``0})">
+            <summary>
+            转换成内存流
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.SerializeFileInfoExtensions.ToObjectList``1(System.IO.Stream)">
+            <summary>
+            转换成对象
+            </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Common.SocketConfig">
+            <summary>
+            Socket通信设置
+            </summary>
+        </member>
+        <member name="F:Common.SocketConfig.SocketConfigFileName">
+            <summary>
+             Socket通信设置文件名
+            </summary>
+        </member>
+        <member name="P:Common.SocketConfig.Port">
+            <summary>
+            通信端口
+            </summary>
+        </member>
+        <member name="M:Common.SocketConfig.Save">
+            <summary>
+            保存
+            </summary>
+        </member>
+        <member name="M:Common.SocketConfig.Load">
+            <summary>
+            加载Sokcet类
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Common.ImageTools">
+            <summary>
+            图像处理工具扩展
+            </summary>
+        </member>
+        <member name="M:Common.ImageTools.ByteArrayToBitmapImage(System.Byte[])">
+            <summary>
+            将二进制流转换成图片 
+            </summary>
+            <param name="byteArray"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.ImageTools.ChangeBitmapToBitmapSource(System.Drawing.Bitmap)">
+            <returns></returns>
+            <summary>
+            从Bitmap转换成BitmapSource 
+            </summary>
+            <param name="bmp"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.ImageTools.ChangeBitmapToImageSource(System.Drawing.Bitmap)">
+            <summary>
+            从bitmap转换成ImageSource 
+            </summary>
+            <param name="bitmap"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.ImageTools.ChangeIconToImageSource(System.Drawing.Icon)">
+            <summary>
+            
+            </summary>
+            <param name="icon"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.ImageTools.ToByteArray(System.Drawing.Image)">
+            <summary>
+            将图片转换成二进制 
+            </summary>
+            <param name="image"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Common.Logger">
+            <summary>
+            Logger
+            </summary>
+        </member>
+        <member name="F:Common.Logger.log">
+            <summary>
+            日志对象
+            </summary>
+        </member>
+        <member name="M:Common.Logger.WriteToLog(System.String,log4net.Core.Level)">
+            <summary>
+            写入日志 
+            </summary>
+            <param name="value"></param>
+            <param name="level"></param>
+        </member>
+        <member name="T:Common.ObjectTools">
+            <summary>
+            对象扩展
+            </summary>
+        </member>
+        <member name="M:Common.ObjectTools.SetProperty(System.Object,System.String,System.Object)">
+            <summary>
+            设置属性区分大小写。
+            </summary>
+            <param name="value"></param>
+            <param name="PropertyName"></param>
+            <param name="Parameter"></param>
+        </member>
+        <member name="M:Common.ObjectTools.GetProperty(System.Object,System.String)">
+            <summary>
+            获取属性区分大小写。
+            </summary>
+            <param name="value"></param>
+            <param name="PropertyName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.ObjectTools.RegistEvent(System.Object,System.String,System.Delegate)">
+            <summary>
+            注册事件区分大小写。
+            </summary>
+            <param name="value"></param>
+            <param name="EventName"></param>
+            <param name="action"></param>
+        </member>
+        <member name="M:Common.ObjectTools.UnRegistEvent(System.Object,System.String,System.Delegate)">
+            <summary>
+            注销事件区分大小写。
+            </summary>
+            <param name="value"></param>
+            <param name="EventName"></param>
+            <param name="action"></param>
+        </member>
+        <member name="M:Common.ObjectTools.InvokeMethod(System.Object,System.String,System.Object[])">
+            <summary>
+            执行方法区分大小写。
+            </summary>
+            <param name="value"></param>
+            <param name="methodName"></param>
+            <param name="Parameter">方法参数，需要与方法定义参数类型和顺序保持一致。</param>
+            <returns></returns> 
+        </member>
+        <member name="T:Common.Message">
+            <summary>
+            消息对象
+            @author zhangsx
+            @date 2017/04/12 11:18:19
+            </summary>
+        </member>
+        <member name="P:Common.Message.Content">
+            <summary>
+            消息内容JSON字符串，一般运行程序时指定的参数，比如打开浏览器时指定网址
+            </summary>
+        </member>
+        <member name="P:Common.Message.IP">
+            <summary>
+            目标IP
+            </summary>
+        </member>
+        <member name="P:Common.Message.Port">
+            <summary>
+            目标端口
+            </summary>
+        </member>
+        <member name="T:Common.MessageTcpExpansion">
+            <summary>
+            消息类 TCP扩展
+            </summary>
+        </member>
+        <member name="M:Common.MessageTcpExpansion.RegisterTcpReceiveMessage(System.Object,System.Action{Common.Message})">
+            <summary>
+            注册监听任务
+            </summary>
+            <param name="value"></param>
+            <param name="func"></param>
+        </member>
+        <member name="M:Common.MessageTcpExpansion.UnRegisterTcpReceiveMessage(System.Object,System.Action{Common.Message})">
+            <summary>
+            注销监听任务
+            </summary>
+            <param name="value"></param>
+            <param name="func"></param>
+        </member>
+        <member name="M:Common.MessageTcpExpansion.TcpSend(Common.Message,System.Action{Common.Message})">
+            <summary>
+            发送消息
+            </summary>
+            <param name="value"></param>
+            <param name="receiveMessage"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.MessageTcpExpansion.TcpSendAsync(Common.Message,System.Action{Common.Message})">
+            <summary>
+            发送消息异步处理
+            </summary>
+            <param name="value"></param>
+            <param name="receiveMessage"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Common.TcpService">
+            <summary>
+            TCP服务端
+            @author zhangsx
+            @date 2017/04/12 11:18:19
+            </summary>
+        </member>
+        <member name="M:Common.TcpService.#ctor">
+            <summary>
+            隐藏构造
+            </summary>
+        </member>
+        <member name="F:Common.TcpService.tcpListener">
+            <summary>
+            TCP监听服务
+            </summary>
+        </member>
+        <member name="E:Common.TcpService.ReceiveMessage">
+            <summary>
+            接收到消息
+            </summary>
+        </member>
+        <member name="P:Common.TcpService.Port">
+            <summary>
+            端口
+            </summary>
+        </member>
+        <member name="M:Common.TcpService.Acceptor">
+            <summary>
+            开启TCP监听
+            </summary>
+        </member>
+        <member name="M:Common.TcpService.Start(System.Int32)">
+            <summary>
+            开始监听，启用监听时使用，用于设置端口号开启服务。
+            </summary>
+            <param name="port"></param>
+        </member>
+        <member name="F:Common.TcpService.tcpService">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Common.TcpService.GetInstence">
+            <summary>
+            获取实例
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Common.TcpService.Disposable">
+            <summary>
+            停止监听
+            </summary>
+        </member>
+        <member name="M:Common.TcpService.Stop">
+            <summary>
+            停止
+            </summary>
+        </member>
+        <member name="M:Common.TcpService.Acceptor(System.IAsyncResult)">
+            <summary>
+            
+            </summary>
+            <param name="o"></param>
+        </member>
+        <member name="M:Common.TcpService.Close(System.Net.Sockets.TcpClient)">
+            <summary>
+            关闭
+            </summary>
+            <param name="client"></param>
+        </member>
+        <member name="T:Common.MessageUdpExpansion">
+            <summary>
+            消息类 Udp 扩展
+            </summary>
+        </member>
+        <member name="M:Common.MessageUdpExpansion.RegisterUdpReceiveMessage(System.Object,System.Action{Common.Message})">
+            <summary>
+            注册监听任务
+            </summary>
+            <param name="value"></param>
+            <param name="func"></param>
+        </member>
+        <member name="M:Common.MessageUdpExpansion.UnRegisterUdpReceiveMessage(System.Object,System.Action{Common.Message})">
+            <summary>
+            注销监听任务
+            </summary>
+            <param name="value"></param>
+            <param name="func"></param>
+        </member>
+        <member name="M:Common.MessageUdpExpansion.UdpSend(Common.Message,System.Action{Common.Message})">
+            <summary>
+            发送消息
+            </summary>
+            <param name="value"></param>
+            <param name="receiveMessage"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.MessageUdpExpansion.UdpSendAsync(Common.Message,System.Action{Common.Message})">
+            <summary>
+            发送消息异步处理
+            </summary>
+            <param name="value"></param>
+            <param name="receiveMessage"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Common.UdpService">
+            <summary>
+            Udp服务
+            </summary>
+        </member>
+        <member name="M:Common.UdpService.#ctor">
+            <summary>
+            隐藏构造
+            </summary>
+        </member>
+        <member name="F:Common.UdpService.udpListener">
+            <summary>
+            Udp监听服务
+            </summary>
+        </member>
+        <member name="E:Common.UdpService.ReceiveMessage">
+            <summary>
+            接收到消息
+            </summary>
+        </member>
+        <member name="P:Common.UdpService.Port">
+            <summary>
+            端口
+            </summary>
+        </member>
+        <member name="M:Common.UdpService.Acceptor">
+            <summary>
+            开启TCP监听
+            </summary>
+        </member>
+        <member name="M:Common.UdpService.Start(System.Int32)">
+            <summary>
+            开始监听，启用监听时使用，用于设置端口号开启服务。
+            </summary>
+            <param name="port"></param>
+        </member>
+        <member name="F:Common.UdpService.udpService">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Common.UdpService.GetInstence">
+            <summary>
+            获取实例
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Common.UdpService.Stop">
+            <summary>
+            停止
+            </summary>
+        </member>
+        <member name="M:Common.UdpService.Disposable">
+            <summary>
+            停止监听
+            </summary>
+        </member>
+        <member name="M:Common.UdpService.Close(System.Net.Sockets.UdpClient)">
+            <summary>
+            关闭
+            </summary>
+            <param name="client"></param>
+        </member>
+        <member name="M:Common.UdpService.Acceptor(System.IAsyncResult)">
+            <summary>
+            
+            </summary>
+            <param name="o"></param>
+        </member>
+        <member name="T:Common.ProcessTools">
+            <summary>
+            进程工具类
+            </summary>
+        </member>
+        <member name="M:Common.ProcessTools.GetProcessByListProcessName(System.Collections.Generic.List{System.String})">
+            <summary>
+            获取进程
+            </summary>
+            <param name="lstProcessNames"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Common.STATURL">
+            <summary>
+            自定义结构 IUrlHistory
+            </summary>
+        </member>
+        <member name="F:Common.STATURL.SIZEOF_STATURL">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Common.STATURL.cbSize">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Common.STATURL.pwcsUrl">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Common.STATURL.pwcsTitle">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Common.STATURL.ftLastVisited">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Common.STATURL.ftLastUpdated">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Common.STATURL.ftExpires">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Common.STATURL.dwFlags">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Common.IEnumSTATURL">
+            <summary>
+            ComImport属性通过guid调用com组件
+            </summary>
+        </member>
+        <member name="M:Common.IEnumSTATURL.Next(System.UInt32,Common.STATURL@,System.UInt32@)">
+            <summary>
+            
+            </summary>
+            <param name="celt"></param>
+            <param name="rgelt"></param>
+            <param name="pceltFetched"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.IEnumSTATURL.Skip(System.UInt32)">
+            <summary>
+            
+            </summary>
+            <param name="celt"></param>
+        </member>
+        <member name="M:Common.IEnumSTATURL.Reset">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Common.IEnumSTATURL.Clone(Common.IEnumSTATURL@)">
+            <summary>
+            
+            </summary>
+            <param name="ppenum"></param>
+        </member>
+        <member name="M:Common.IEnumSTATURL.SetFilter(System.String,System.UInt32)">
+            <summary>
+            
+            </summary>
+            <param name="poszFilter"></param>
+            <param name="dwFlags"></param>
+        </member>
+        <member name="T:Common.IUrlHistoryStg2">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Common.IUrlHistoryStg2.AddUrl(System.String,System.String,System.UInt32)">
+            <summary>
+            
+            </summary>
+            <param name="pocsUrl"></param>
+            <param name="pocsTitle"></param>
+            <param name="dwFlags"></param>
+        </member>
+        <member name="M:Common.IUrlHistoryStg2.DeleteUrl(System.String,System.UInt32)">
+            <summary>
+            
+            </summary>
+            <param name="pocsUrl"></param>
+            <param name="dwFlags"></param>
+        </member>
+        <member name="M:Common.IUrlHistoryStg2.QueryUrl(System.String,System.UInt32,Common.STATURL@)">
+            <summary>
+            
+            </summary>
+            <param name="pocsUrl"></param>
+            <param name="dwFlags"></param>
+            <param name="lpSTATURL"></param>
+        </member>
+        <member name="M:Common.IUrlHistoryStg2.BindToObject(System.String,System.Guid@,System.Object@)">
+            <summary>
+            
+            </summary>
+            <param name="pocsUrl"></param>
+            <param name="riid"></param>
+            <param name="ppvOut"></param>
+        </member>
+        <member name="M:Common.IUrlHistoryStg2.EnumUrls">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Common.IUrlHistoryStg2.AddUrlAndNotify(System.String,System.String,System.UInt32,System.Boolean,System.Object,System.Object)">
+            <summary>
+            
+            </summary>
+            <param name="pocsUrl"></param>
+            <param name="pocsTitle"></param>
+            <param name="dwFlags"></param>
+            <param name="fWriteHistory"></param>
+            <param name="poctNotify"></param>
+            <param name="punkISFolder"></param>
+        </member>
+        <member name="M:Common.IUrlHistoryStg2.ClearHistory">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Common.UrlHistory">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Common.UrlData">
+            <summary>
+            Url数据
+            </summary>
+        </member>
+        <member name="P:Common.UrlData.Name">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Common.UrlData.Url">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Common.UrlData.Title">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Common.UrlData.GetUrlData">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Common.WorkPath">
+            <summary>
+            FileName: WorkPath.cs
+            CLRVersion: 4.0.30319.42000
+            @author zhangsx
+            @date 2017/04/12 11:18:19
+            Corporation:
+            Description:    
+            </summary>
+        </member>
+        <member name="F:Common.WorkPath.ApplicationDataPath">
+            <summary>     
+            公共工作目录-该目录根据程序集名称创建-访问时一般不需要管理员权限，若目录不存在需要手动创建。
+            </summary>
+        </member>
+        <member name="F:Common.WorkPath.ApplicationWorkPath">
+            <summary>
+            公共工作目录-该目录根据程序集名称创建-访问时一般不需要管理员权限，若目录不存在需要手动创建。
+            </summary>
+        </member>
+        <member name="F:Common.WorkPath.ExecPath">
+            <summary>
+            应用程序所在目录-应用程序安装目录，可能需要管理员权限，该目录一定存在。
+            </summary>
+        </member>
+        <member name="F:Common.WorkPath.AssemblyName">
+            <summary>
+            当前应用程序集执行程序名称
+            </summary>
+        </member>
+        <member name="M:Common.WorkPath.GetPrivetePath">
+            <summary>
+            获取私有目录-只允许程序集安装目录下子目录
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Common.WorkPath.CreateDomain(System.String)">
+            <summary>
+            创建应用程序域
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Common.DynamicJsonConverter">
+            <summary>
+            动态类型对象
+            @author zhangsx
+            @date 2017/04/12 11:18:19
+            </summary>
+        </member>
+        <member name="M:Common.DynamicJsonConverter.Deserialize(System.Collections.Generic.IDictionary{System.String,System.Object},System.Type,System.Web.Script.Serialization.JavaScriptSerializer)">
+            <summary>
+            
+            </summary>
+            <param name="dictionary"></param>
+            <param name="type"></param>
+            <param name="serializer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.DynamicJsonConverter.Serialize(System.Object,System.Web.Script.Serialization.JavaScriptSerializer)">
+            <summary>
+            
+            </summary>
+            <param name="obj"></param>
+            <param name="serializer"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Common.DynamicJsonConverter.SupportedTypes">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Common.DynamicJsonObject">
+            <summary>
+            
+            @author zhangsx
+            @date 2017/04/12 11:18:19
+            </summary>
+        </member>
+        <member name="M:Common.DynamicJsonObject.#ctor(System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            
+            </summary>
+            <param name="dictionary"></param>
+        </member>
+        <member name="M:Common.DynamicJsonObject.TryGetMember(System.Dynamic.GetMemberBinder,System.Object@)">
+            <summary>
+            
+            </summary>
+            <param name="binder"></param>
+            <param name="result"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.DynamicJsonObject.TrySetMember(System.Dynamic.SetMemberBinder,System.Object)">
+            <summary>
+            设置值
+            </summary>
+            <param name="binder"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Common.FunctionTools">
+            <summary>
+            FileName: Function.cs
+            CLRVersion: 4.0.30319.42000
+            @author zhangsx
+            @date 2017/04/12 11:18:19
+            Corporation:
+            Description:    
+            </summary> 
+        </member>
+        <member name="M:Common.FunctionTools.Compress(System.Byte[])">
+            <summary>
+            压缩 
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.FunctionTools.Decompress(System.Byte[])">
+            <summary>
+            解压缩
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.FunctionTools.IsIPAddress(System.String)">
+            <summary>
+            验证字符串是否为IP地址 
+            </summary>
+            <param name="ip"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.FunctionTools.WeeksOfYear(System.DateTime)">
+            <summary>
+            WeeksOfYear
+            </summary>
+            <param name="dTime"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.FunctionTools.CreateList``1(System.Collections.Generic.List{``0},System.Int32)">
+            <summary>
+            
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="targe"></param>
+            <param name="size"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Common.JSON">
+            <summary>
+            解析JSON，仿Javascript风格 
+            </summary>
+            @author zhangsx
+            @date 2017/04/12 11:18:19
+        </member>
+        <member name="M:Common.JSON.ConvertToBytes(System.String)">
+            <summary>
+            将字符串转换成二进制 
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.JSON.ConvertToBytes(System.Object)">
+            <summary>
+            将Object转换成二进制 
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.JSON.ConvertToObject``1(System.Byte[])">
+            <summary>
+            将二进制转换成对象 
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.JSON.ConvertToString(System.Byte[])">
+            <summary>
+            将二进制转换成字符串 
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.JSON.JsParse``1(System.String)">
+            <summary>
+            将字符串转换成Json对象 
+            </summary>
+            <typeparam name="T"> 泛型对象 </typeparam>
+            <param name="value"> 字符串 </param>
+            <returns> 泛型对象 </returns>
+        </member>
+        <member name="M:Common.JSON.JsStringify(System.Object)">
+            <summary>
+            将对象转换成Json字符串 
+            </summary>
+            <param name="value"> 对象 </param>
+            <returns> Json字符串 </returns>
+        </member>
+        <member name="M:Common.JSON.LoadJsonFile``1(System.String,System.String)">
+            <summary>
+            加载JSON格式文件 
+            </summary>
+            <typeparam name="T"> 泛型类 </typeparam>
+            <param name="Path"> 文件路径 </param>
+            <param name="FileName"> 文件名 </param>
+            <returns> 泛型实体 </returns>
+        </member>
+        <member name="M:Common.JSON.LoadJsonFile``1(System.String)">
+            <summary>
+            加载JSON格式文件 
+            </summary>
+            <typeparam name="T"> 泛型类 </typeparam>
+            <param name="FilePath"> 文件全路径 </param>
+            <returns> 泛型实体 </returns>
+        </member>
+        <member name="M:Common.JSON.LoadJsonFiles``1(System.String)">
+            <summary>
+            加载JSON格式文件 
+            </summary>
+            <typeparam name="T"> 泛型类 </typeparam>
+            <param name="Path"> 文件全路径 </param> 
+            <returns> 泛型实体 </returns>
+        </member>
+        <member name="M:Common.JSON.LoadJsonFiles``1(System.String,System.String)">
+            <summary>
+            加载JSON格式文件 
+            </summary>
+            <typeparam name="T"> 泛型类 </typeparam>
+            <param name="Path"> 文件路径 </param> 
+            <param name="searchPattern">   </param> 
+            <returns> 泛型实体 </returns>
+        </member>
+        <member name="M:Common.JSON.LoadJsonFiles``1(System.String,System.String,System.IO.SearchOption)">
+            <summary>
+            加载JSON格式文件 
+            </summary>
+            <typeparam name="T"> 泛型类 </typeparam>
+            <param name="Path"> 文件路径 </param> 
+            <param name="searchPattern">   </param>
+            <param name="searchOption">   </param> 
+            <returns> 泛型实体 </returns>
+        </member>
+        <member name="M:Common.JSON.SaveJsonFile``1(``0,System.String,System.String)">
+            <summary>
+            保存JSON文本 
+            </summary>
+            <typeparam name="T"> 泛型类 </typeparam>
+            <param name="value"> 数据对象 </param>
+            <param name="Path"> 文件路径 </param>
+            <param name="FileName"> 文件名 </param>
+        </member>
+        <member name="M:Common.JSON.ConvertToDynamic(System.String)">
+            <summary>
+            转换成动态类型对象
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.JSON.ConvertToDynamicObject(System.String)">
+            <summary>
+            转换成动态类型对象
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.JSON.ConvertToType``1(System.Object)">
+            <summary>
+            对象转换-要求对象类型必须可序列化
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.JSON.Copy``1(``0)">
+            <summary>
+            深度复制-要求对象类型必须可序列化
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Common.Printer">
+            <summary>
+            打印机类
+            @author zhangsx
+            @date 2017/04/12 11:18:19
+            </summary>
+        </member>
+        <member name="M:Common.Printer.GetPrinterStatusInt(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="PrinterName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.Printer.EnumPrintersByFlag(Common.Printer.PrinterEnumFlags)">
+            <summary>
+            
+            </summary>
+            <param name="Flags"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.Printer.GetPrinterStatus(System.String)">
+            <summary> 
+            获取当前指定打印机的状态 
+            </summary> 
+            <param name="PrinterName">打印机名称</param> 
+            <returns>打印机状态描述</returns> 
+        </member>
+        <member name="M:Common.Printer.DeleteCustomPaperSize(System.String,System.String)">
+            <summary> 
+            删除已经存在的自定义纸张 
+            </summary> 
+            <param name="PrinterName">打印机名称</param> 
+            <param name="PaperName">纸张名称</param> 
+        </member>
+        <member name="M:Common.Printer.AddCustomPaperSize(System.String,System.String,System.Single,System.Single)">
+            <summary> 
+            指定的打印机设置以mm为单位的自定义纸张(Form) 
+            </summary> 
+            <param name="PrinterName">打印机名称</param> 
+            <param name="PaperName">Form名称</param> 
+            <param name="WidthInMm">以mm为单位的宽度</param> 
+            <param name="HeightInMm">以mm为单位的高度</param> 
+        </member>
+        <member name="M:Common.Printer.GetPrinterList">
+            <summary> 
+            获取本地打印机列表 
+            可以通过制定参数获取网络打印机 
+            </summary> 
+            <returns>打印机列表</returns> 
+        </member>
+        <member name="M:Common.Printer.GetDeaultPrinterName">
+            <summary> 
+            获取本机的默认打印机名称 
+            </summary> 
+            <returns>默认打印机名称</returns> 
+        </member>
+        <member name="M:Common.Printer.SetPrinterToDefault(System.String)">
+            <summary> 
+            设置默认打印机 
+            </summary> 
+            <param name="PrinterName">可用的打印机名称</param> 
+        </member>
+        <member name="M:Common.Printer.PrinterInList(System.String)">
+            <summary> 
+            判断打印机是否在系统可用的打印机列表中 
+            </summary> 
+            <param name="PrinterName">打印机名称</param> 
+            <returns>是：在；否：不在</returns> 
+        </member>
+        <member name="M:Common.Printer.FormInPrinter(System.String,System.String)">
+            <summary> 
+            判断表单是否在指定的打印机所支持的纸张列表中 
+            </summary> 
+            <param name="PrinterName">打印机名称</param> 
+            <param name="PaperName">纸张名称</param> 
+            <returns>是：在；否：不在</returns> 
+        </member>
+        <member name="M:Common.Printer.FormSameSize(System.String,System.String,System.Decimal,System.Decimal)">
+            <summary> 
+            判断指定纸张的宽度和高度和在文本框中指定的宽度和高度是否匹配 
+            </summary> 
+            <param name="PrinterName">打印机名称</param> 
+            <param name="FormName">表单名称</param> 
+            <param name="Width">宽度</param> 
+            <param name="Height">高度</param> 
+            <returns></returns> 
+        </member>
+        <member name="M:Common.Printer.FromInchToCM(System.Decimal)">
+            <summary> 
+            英尺到厘米的转换 
+            米国人用的是英尺，中国人用的是厘米 
+            1 inch = 2.5400 cm 
+            </summary> 
+            <param name="inch">英尺数</param> 
+            <returns>厘米数，两位小数</returns> 
+        </member>
+        <member name="T:Common.Properties.Resources">
+            <summary>
+              一个强类型的资源类，用于查找本地化的字符串等。
+            </summary>
+        </member>
+        <member name="P:Common.Properties.Resources.ResourceManager">
+            <summary>
+              返回此类使用的缓存的 ResourceManager 实例。
+            </summary>
+        </member>
+        <member name="P:Common.Properties.Resources.Culture">
+            <summary>
+              使用此强类型资源类，为所有资源查找
+              重写当前线程的 CurrentUICulture 属性。
+            </summary>
+        </member>
+        <member name="T:Common.SingleInstanceManager">
+            <summary>
+            FileName: SingleInstanceManager.cs
+            CLRVersion: 4.0.30319.42000
+            @author zhangsx
+            @date 2017/04/12 11:18:19
+            Corporation:
+            Description: 
+            Using VB bits to detect single instances and process accordingly:
+            * OnStartup is fired when the first instance loads
+            * OnStartupNextInstance is fired when the application is re-run again
+            NOTE: it is redirected to this instance thanks to IsSingleInstance
+            </summary> 
+        </member>
+        <member name="M:Common.SingleInstanceManager.Launcher``1(System.String[],System.Boolean)">
+            <summary>
+            运行程序
+            </summary>
+            <typeparam name="T">WPF 程序指定启动程序类，Winform 应用程序指定主窗口</typeparam>
+            <param name="args">启动参数</param>
+            <param name="IsSingleInstance">启动参数</param>
+        </member>
+        <member name="P:Common.SingleInstanceManager.WPFApplication">
+            <summary>
+            应用程序集
+            </summary>
+        </member>
+        <member name="P:Common.SingleInstanceManager.MainWindow">
+            <summary>
+            Winform主窗口
+            </summary>
+        </member>
+        <member name="M:Common.SingleInstanceManager.#ctor">
+            <summary>
+            构造函数初始化为单实例应用程序
+            </summary>
+        </member>
+        <member name="M:Common.SingleInstanceManager.OnStartup(Microsoft.VisualBasic.ApplicationServices.StartupEventArgs)">
+            <summary>
+            程序启动
+            </summary>
+            <param name="e"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.SingleInstanceManager.OnStartupNextInstance(Microsoft.VisualBasic.ApplicationServices.StartupNextInstanceEventArgs)">
+            <summary>
+            程序已经被启动显示当前主窗口
+            </summary>
+            <param name="eventArgs"></param>
+        </member>
+        <member name="T:Common.StrongWebClient">
+            <summary>
+            自定义Web客户端
+            @author zhangsx
+            @date 2017/04/12 11:18:19
+            </summary>
+        </member>
+        <member name="P:Common.StrongWebClient.Timeout">
+            <summary>
+            设置超时时间(毫秒)
+            </summary>
+        </member>
+        <member name="M:Common.StrongWebClient.GetWebRequest(System.Uri)">
+            <summary>
+            
+            </summary>
+            <param name="address"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Common.WebClientExpansion">
+            <summary>
+            Web客户端
+            @author zhangsx
+            @date 2017/04/12 11:18:19
+            </summary>
+        </member>
+        <member name="M:Common.WebClientExpansion.DownloadString(System.Uri,System.String)">
+            <summary>
+            根据URL得到数据对象
+            </summary>
+            <param name="value">URL对象</param>
+            <param name="data">需要提交的数据</param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.WebClientExpansion.UploadFile(System.Uri,System.String)">
+            <summary>
+            上传文件
+            </summary>
+            <param name="value"></param>
+            <param name="fileName"></param>
+        </member>
+        <member name="M:Common.WebClientExpansion.UploadFile(System.String,System.String)">
+            <summary>
+            上传文件
+            </summary>
+            <param name="value"></param>
+            <param name="fileName"></param>
+        </member>
+        <member name="M:Common.WebClientExpansion.DownloadFile(System.Uri,System.String)">
+            <summary>
+            下载文件
+            </summary>
+            <param name="value"></param>
+            <param name="fileName"></param>
+        </member>
+        <member name="M:Common.WebClientExpansion.DownloadFile(System.String,System.String)">
+            <summary>
+            下载文件
+            </summary>
+            <param name="value"></param>
+            <param name="fileName"></param>
+        </member>
+        <member name="M:Common.WebClientExpansion.DownloadFileAsync(System.Uri,System.String,System.Action{System.Net.DownloadProgressChangedEventArgs},System.Action)">
+            <summary>
+            下载文件
+            </summary>  
+            <param name="value"></param> 
+            <param name="fileName"></param>
+            <param name="progressChanged"></param>
+            <param name="completed"></param>
+        </member>
+        <member name="M:Common.WebClientExpansion.DownloadFileAsync(System.String,System.String,System.Action{System.Net.DownloadProgressChangedEventArgs},System.Action)">
+            <summary>
+            下载文件
+            </summary>  
+            <param name="value"></param> 
+            <param name="fileName"></param>
+            <param name="progressChanged"></param>
+            <param name="completed"></param>
+        </member>
+        <member name="M:Common.WebClientExpansion.DownloadString(System.Uri)">
+            <summary>
+            根据URL得到数据对象
+            </summary>
+            <param name="value">URL对象</param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.WebClientExpansion.DownloadObject``1(System.Uri)">
+            <summary>
+            根据URL得到数据对象
+            </summary>
+            <typeparam name="T">泛型实体类</typeparam>
+            <param name="value">URL对象</param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.WebClientExpansion.DownloadObject``1(System.Uri,System.String)">
+            <summary>
+            根据URL得到数据对象
+            </summary>
+            <typeparam name="T">泛型实体类</typeparam>
+            <param name="value">URL对象</param>
+            <param name="data">需要提交的数据</param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.WebClientExpansion.DownloadString(System.String)">
+            <summary>
+            根据URL字符串得到数据对象
+            </summary>
+            <param name="value">URL字符串</param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.WebClientExpansion.DownloadString(System.String,System.String)">
+            <summary>
+            根据URL字符串得到数据对象
+            </summary>
+            <param name="value">URL字符串</param>
+            <param name="data">需要提交的数据</param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.WebClientExpansion.DownloadString(System.String,System.Collections.Generic.List{System.String})">
+            <summary>
+            批量提交内容
+            </summary>
+            <param name="value">URL字符串</param>
+            <param name="data">需要提交的数组</param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.WebClientExpansion.DownloadString``1(System.String,System.String,System.Collections.Generic.List{``0})">
+            <summary>
+            批量提交内容
+            </summary>
+            <param name="value">URL字符串</param>
+            <param name="key">需要提交的数组的Key</param>
+            <param name="data">需要提交的数组</param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.WebClientExpansion.DownloadObject``1(System.String)">
+            <summary>
+            根据URL字符串得到数据对象
+            </summary>
+            <typeparam name="T">泛型实体类</typeparam>
+            <param name="value">URL字符串</param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.WebClientExpansion.DownloadObject``1(System.String,System.String)">
+            <summary>
+            根据URL字符串得到数据对象
+            </summary>
+            <typeparam name="T">泛型实体类</typeparam>
+            <param name="value">URL字符串</param>
+            <param name="data">需要提交的数据</param>
+            <returns></returns>
+        </member>
+        <member name="T:Common.Win32Helper">
+            <summary>
+            Win32帮助类 
+            @author zhangsx
+            @date 2017/04/12 11:18:19
+            </summary> 
+        </member>
+        <member name="F:Common.Win32Helper.GWL_STYLE">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Common.Win32Helper.SW_MAXIMIZE">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Common.Win32Helper.SWP_FRAMECHANGED">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Common.Win32Helper.SWP_NOMOVE">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Common.Win32Helper.SWP_NOSIZE">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Common.Win32Helper.SWP_NOZORDER">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Common.Win32Helper.WS_BORDER">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Common.Win32Helper.WS_THICKFRAME">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Common.Win32Helper.HWND_NOTOPMOST">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Common.Win32Helper.DeleteObject(System.IntPtr)">
+            <summary>
+            
+            </summary>
+            <param name="hObject"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.Win32Helper.GetWindowLong(System.IntPtr,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="hWnd"></param>
+            <param name="nIndex"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.Win32Helper.SetCursorPos(System.Int32,System.Int32)">
+            <summary>
+            设置鼠标的坐标 
+            </summary>
+            <param name="X"> 横坐标 </param>
+            <param name="Y"> 纵坐标 </param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.Win32Helper.SetParent(System.IntPtr,System.IntPtr)">
+            <summary>
+            
+            </summary>
+            <param name="hWndChild"></param>
+            <param name="hWndNewParent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.Win32Helper.SetWindowLong(System.IntPtr,System.Int32,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="hWnd"></param>
+            <param name="nIndex"></param>
+            <param name="dwNewLong"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.Win32Helper.SetWindowPos(System.IntPtr,System.IntPtr,System.Int32,System.Int32,System.Int32,System.Int32,System.UInt32)">
+            <summary>
+            
+            </summary>
+            <param name="hWnd"></param>
+            <param name="hWndInsertAfter"></param>
+            <param name="X"></param>
+            <param name="Y"></param>
+            <param name="cx"></param>
+            <param name="cy"></param>
+            <param name="uFlags"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

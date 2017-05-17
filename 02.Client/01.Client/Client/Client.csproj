@@ -1,0 +1,163 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{DCEBE350-9770-428E-99AE-48E49459191D}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Client</RootNamespace>
+    <AssemblyName>Client</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\..\99.Bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\..\..\99.Bin\Client.XML</DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\..\99.Bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\..\..\99.Bin\Client.XML</DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App.cs" />
+    <Compile Include="Launcher.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="App.config" />
+    <None Include="app.manifest" />
+    <None Include="Config\Log4net.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\01.Base\01.Common\Common\Common.csproj">
+      <Project>{f0dc9fa5-eaec-45a6-a18b-5378c89a825b}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\01.Base\02.PluginAPI\PluginAPI\PluginAPI.csproj">
+      <Project>{d4a29449-842d-440f-9256-499c3a3fe571}</Project>
+      <Name>PluginAPI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\04.Thems\01.MaterialDesign\MaterialDesign\MaterialDesign.csproj">
+      <Project>{ee92cd3c-7345-45bc-8457-140b5a403945}</Project>
+      <Name>MaterialDesign</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="test\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ProjectExtensions />
+  <PropertyGroup>
+    <PostBuildEvent>if not exist $(TargetDir)libs md $(TargetDir)libs
+if not exist $(TargetDir)Bin md $(TargetDir)Bin
+if "$(ConfigurationName)"=="Release" copy $(TargetDir)Dragablz.dll $(TargetDir)Bin\
+if "$(ConfigurationName)"=="Release" copy $(TargetDir)log4net.dll $(TargetDir)Bin\
+if "$(ConfigurationName)"=="Release" copy $(TargetDir)MahApps.Metro.dll $(TargetDir)Bin\
+if "$(ConfigurationName)"=="Release" copy $(TargetDir)MaterialDesign*.dll $(TargetDir)Bin\
+if "$(ConfigurationName)"=="Release" copy $(TargetDir)MVVM.dll $(TargetDir)Bin\
+if "$(ConfigurationName)"=="Release" copy $(TargetDir)PluginAPI.dll $(TargetDir)Bin\
+if "$(ConfigurationName)"=="Release" copy $(TargetDir)Common.dll $(TargetDir)Bin\
+
+if "$(ConfigurationName)"=="Release" del  $(TargetDir)Dragablz.*
+if "$(ConfigurationName)"=="Release" del  $(TargetDir)log4net.*
+if "$(ConfigurationName)"=="Release" del  $(TargetDir)MahApps.Metro.*
+if "$(ConfigurationName)"=="Release" del  $(TargetDir)MaterialDesign*
+if "$(ConfigurationName)"=="Release" del  $(TargetDir)MVVM.*
+if "$(ConfigurationName)"=="Release" del  $(TargetDir)PluginAPI.*
+if "$(ConfigurationName)"=="Release" del  $(TargetDir)Common.*
+  
+if "$(ConfigurationName)"=="Release" copy $(TargetDir)*.dll $(TargetDir)libs\
+
+if "$(ConfigurationName)"=="Release" del  $(TargetDir)*.dll
+if "$(ConfigurationName)"=="Release" del  $(TargetDir)*.pdb
+if "$(ConfigurationName)"=="Release" del  $(TargetDir)*.xml
+
+if "$(ConfigurationName)"=="Debug" del $(TargetDir)libs\*.dll
+if "$(ConfigurationName)"=="Debug" rd $(TargetDir)libs
+if "$(ConfigurationName)"=="Debug" del $(TargetDir)Bin\*.dll
+if "$(ConfigurationName)"=="Debug" rd $(TargetDir)Bin</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
