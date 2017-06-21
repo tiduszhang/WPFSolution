@@ -17,107 +17,78 @@ namespace Common
         /// <summary>
         /// 
         /// </summary>
-        public const Int32 GWL_STYLE = -16;
-        /// <summary>
-        /// 
-        /// </summary>
-        public const Int32 SW_MAXIMIZE = 3;
-        /// <summary>
-        /// 
-        /// </summary>
-        public const Int32 SWP_FRAMECHANGED = 0x0020;
-        /// <summary>
-        /// 
-        /// </summary>
-        public const Int32 SWP_NOMOVE = 0x0002;
-        /// <summary>
-        /// 
-        /// </summary>
-        public const Int32 SWP_NOSIZE = 0x0001;
-        /// <summary>
-        /// 
-        /// </summary>
-        public const Int32 SWP_NOZORDER = 0x0004;
-        /// <summary>
-        /// 
-        /// </summary>
-        public const Int32 WS_BORDER = (Int32)0x00800000L;
-        /// <summary>
-        /// 
-        /// </summary>
-        public const Int32 WS_THICKFRAME = (Int32)0x00040000L;
-        /// <summary>
-        /// 
-        /// </summary>
-        public IntPtr HWND_NOTOPMOST = new IntPtr(-2);
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="hObject"></param>
         /// <returns></returns>
         [DllImport("gdi32.dll", SetLastError = true)]
         public static extern bool DeleteObject(IntPtr hObject);
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="hWnd"></param>
-        /// <param name="nIndex"></param>
-        /// <returns></returns>
-        [DllImport("user32.dll")]
-        public static extern Int32 GetWindowLong(IntPtr hWnd,
-            Int32 nIndex
-        );
 
         /// <summary>
-        /// 设置鼠标的坐标 
+        /// 
         /// </summary>
-        /// <param name="X"> 横坐标 </param>
-        /// <param name="Y"> 纵坐标 </param>
+        /// <param name="lpLibFileName"></param>
         /// <returns></returns>
+        [DllImport("kernel32.dll", EntryPoint = "LoadLibrary")]
+        public static extern IntPtr LoadLibrary([MarshalAs(UnmanagedType.LPStr)] string lpLibFileName);
 
-        [DllImport("user32.dll")]
-        public static extern bool SetCursorPos(int X, int Y);
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="hWndChild"></param>
-        /// <param name="hWndNewParent"></param>
+        /// <param name="hModule"></param>
+        /// <param name="lpProcName"></param>
         /// <returns></returns>
-        [DllImport("user32.dll")]
-        public static extern IntPtr SetParent(IntPtr hWndChild,
-            IntPtr hWndNewParent
-        );
+        [DllImport("kernel32.dll", EntryPoint = "GetProcAddress")]
+        public static extern IntPtr GetProcAddress(IntPtr hModule, [MarshalAs(UnmanagedType.LPStr)] string lpProcName);
+
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="hWnd"></param>
-        /// <param name="nIndex"></param>
-        /// <param name="dwNewLong"></param>
+        /// <param name="hModule"></param>
         /// <returns></returns>
-        [DllImport("user32.dll")]
-        public static extern Int32 SetWindowLong(IntPtr hWnd,
-            Int32 nIndex,
-            Int32 dwNewLong
-        );
+        [DllImport("kernel32.dll", EntryPoint = "FreeLibrary")]
+        public static extern bool FreeLibrary(IntPtr hModule);
+
+        /// <summary>
+        /// 动态链接库-指针对象
+        /// </summary>
+        private IntPtr hLib;
+        /// <summary>
+        /// 是否回收完毕
+        /// </summary>
+        private bool _disposed;
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="DLLPath"></param>
+        public Win32Helper(String DLLPath)
+        {
+            hLib = LoadLibrary(DLLPath);
+        }
+
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="hWnd"></param>
-        /// <param name="hWndInsertAfter"></param>
-        /// <param name="X"></param>
-        /// <param name="Y"></param>
-        /// <param name="cx"></param>
-        /// <param name="cy"></param>
-        /// <param name="uFlags"></param>
-        /// <returns></returns>
-        [DllImport("user32.dll")]
-        public static extern Int32 SetWindowPos(IntPtr hWnd,
-            IntPtr hWndInsertAfter,
-            Int32 X,
-            Int32 Y,
-            Int32 cx,
-            Int32 cy,
-            UInt32 uFlags
-        );
+        ~Win32Helper()
+        {
+            FreeLibrary(hLib);
+        }
+
+        /// <summary>
+        /// 将要执行的函数转换为委托
+        /// </summary>
+        /// <param name="APIName"></param>
+        /// <param name="t"></param>
+        /// <returns></returns> 
+        public Delegate Invoke(string APIName, Type t)
+        {
+            IntPtr api = GetProcAddress(hLib, APIName);
+            if (api == IntPtr.Zero)
+            {
+                return null;
+            }
+            else
+            {
+                return Marshal.GetDelegateForFunctionPointer(api, t);
+            }
+        }
     }
 }
