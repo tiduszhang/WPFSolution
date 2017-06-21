@@ -14,7 +14,7 @@ namespace Common
     [System.Runtime.InteropServices.ComVisible(true)]
     [System.ComponentModel.DesignerCategory("Code")]
     [System.ComponentModel.Designer("Code")]
-    class StrongWebClient : System.Net.WebClient
+    internal class StrongWebClient : System.Net.WebClient
     {
         /// <summary>
         /// 设置超时时间(毫秒)
@@ -60,6 +60,6 @@ namespace Common
             }
 
             return base.GetWebRequest(address);
-        } 
+        }
     }
 }

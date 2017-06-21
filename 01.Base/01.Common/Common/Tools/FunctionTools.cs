@@ -21,7 +21,31 @@ namespace Common
     /// Description:    
     /// </summary> 
     public static class FunctionTools
-    { 
+    {
+        /// <summary>
+        /// 将二进制转换成字符串 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static string ConvertToString(this byte[] value)
+        {
+            return Encoding.Default.GetString(value);
+            //return System.BitConverter.ToString(value);
+            //return Encoding.UTF8.GetString(value);
+        }
+
+        /// <summary>
+        /// 将二进制转换成字符串 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static string ConvertToUTF8String(this byte[] value)
+        {
+            return Encoding.UTF8.GetString(value);
+            //return System.BitConverter.ToString(value);
+            //return Encoding.UTF8.GetString(value);
+        }
+
         /// <summary>
         /// 压缩 
         /// </summary>

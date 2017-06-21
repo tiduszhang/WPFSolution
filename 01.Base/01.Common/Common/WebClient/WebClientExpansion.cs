@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -19,11 +20,13 @@ namespace Common
         /// </summary>
         /// <param name="value">URL对象</param>
         /// <param name="data">需要提交的数据</param>
+        /// <param name="head">头部信息</param>
+        /// <param name="fast">快速访问</param>
         /// <returns></returns>
-        public static string DownloadString(this Uri value, string data)
+        public static string DownloadString(this Uri value, object data = null, string head = "", bool fast = false)
         {
             string result = "";
-            //value.ToString().WriteToLog(log4net.Core.Level.Debug);
+            ("请求地址：" + value.ToString()).WriteToLog(log4net.Core.Level.Debug);
             try
             {
                 //WebRequest webRequest = WebRequest.Create(value);
@@ -52,23 +55,38 @@ namespace Common
                 //}
 
                 StrongWebClient webClient = new StrongWebClient();
-                //webClient.Timeout = 1000;
-                webClient.Headers["Content-type"] = "application/x-www-form-urlencoded";
-                webClient.Encoding = Encoding.UTF8;
-                if (String.IsNullOrWhiteSpace(data))
+                if (fast)
                 {
+                    webClient.Timeout = 1000;
+                }
+                if (!String.IsNullOrWhiteSpace(head))
+                {
+                    webClient.Headers["x-auth-token"] = head;//todo:用户Appkey 
+                }
+                webClient.Encoding = Encoding.UTF8;
+                if (data == null || String.IsNullOrWhiteSpace(data.ToString()))
+                {
+                    webClient.Headers["Content-type"] = "application/json";
                     result = webClient.DownloadString(value);
                 }
-                else
+                else if (data != null && data is string)
                 {
-                    result = webClient.UploadString(value, data);
-                    //result = webClient.UploadData(value, data.ConvertToBytes()).ConvertToString();
+                    webClient.Headers["Content-type"] = "application/json";
+                    result = webClient.UploadString(value, data.ToString());
+                }
+                else if (data != null && data is NameValueCollection)
+                {
+                    result = webClient.UploadValues(value, (data as NameValueCollection)).ConvertToUTF8String();
+                }
+                else if (data != null)
+                {
+                    result = webClient.UploadData(value, data.ConvertToBytes()).ConvertToUTF8String();
                 }
                 webClient.Dispose();
             }
             catch (Exception ex)
             {
-                if (String.IsNullOrWhiteSpace(data))
+                if (data == null || String.IsNullOrWhiteSpace(data.ToString()))
                 {
                     ("请求地址：" + value.ToString() + "出现异常！" + System.Environment.NewLine + ex.ToString()).WriteToLog(log4net.Core.Level.Error);
                 }
@@ -76,10 +94,12 @@ namespace Common
                 {
                     ("请求地址：" + value.ToString() + "出现异常！提交数据：" + data + System.Environment.NewLine + ex.ToString()).WriteToLog(log4net.Core.Level.Error);
                 }
+                result.Trim().WriteToLog(log4net.Core.Level.Debug);
+                result = "";
                 //throw ex;
             }
             //GC.Collect();
-            //result.Trim().WriteToLog(log4net.Core.Level.Debug);
+            ("服务器返回：" + result.Trim()).WriteToLog(log4net.Core.Level.Debug);
             return result.Trim();
         }
 
@@ -88,24 +108,29 @@ namespace Common
         /// </summary>
         /// <param name="value"></param>
         /// <param name="fileName"></param>
-        public static string UploadFile(this Uri value, string fileName)
+        /// <param name="head"></param>
+        public static string UploadFile(this Uri value, string fileName, string head = "")
         {
             string result = "";
-            //value.ToString().WriteToLog(log4net.Core.Level.Debug);
+            ("请求上传文件：" + value.ToString()).WriteToLog(log4net.Core.Level.Debug);
             try
             {
                 StrongWebClient webClient = new StrongWebClient();
                 webClient.Headers["Content-type"] = "application/octet-stream";
+                if (!String.IsNullOrWhiteSpace(head))
+                {
+                    webClient.Headers["x-auth-token"] = head;//todo:用户Appkey 
+                }
                 byte[] uploadResult = webClient.UploadFile(value, fileName);
                 webClient.Dispose();
                 result = Encoding.UTF8.GetString(uploadResult);
             }
             catch (Exception ex)
             {
-                (value.ToString() + System.Environment.NewLine + ex.ToString()).WriteToLog(log4net.Core.Level.Debug);
-                //throw ex;
+                ("上传过程中出现异常：" + value.ToString() + "出现异常！" + System.Environment.NewLine + ex.ToString()).WriteToLog(log4net.Core.Level.Error);
             }
-            GC.Collect();
+            //GC.Collect();
+            ("服务器返回：" + result.Trim()).WriteToLog(log4net.Core.Level.Debug);
             return result;
         }
 
@@ -114,10 +139,65 @@ namespace Common
         /// </summary>
         /// <param name="value"></param>
         /// <param name="fileName"></param>
-        public static string UploadFile(this string value, string fileName)
+        /// <param name="head"></param>
+        public static string UploadFile(this string value, string fileName, string head = "")
         {
             Uri url = new Uri(value);
-            return url.UploadFile(fileName);
+            return url.UploadFile(fileName, head);
+        }
+
+
+        /// <summary>
+        /// 上传文件
+        /// </summary>  
+        /// <param name="value"></param> 
+        /// <param name="fileName"></param> 
+        /// <param name="head"></param>
+        public static WebClient UploadFileAsync(this Uri value, string fileName, string head = "")
+        {
+            ("请求上传文件地址：" + value.ToString()).WriteToLog(log4net.Core.Level.Debug);
+            StrongWebClient webClient = new StrongWebClient();
+            try
+            {
+                webClient.Headers["Content-type"] = "application/octet-stream";
+                if (!String.IsNullOrWhiteSpace(head))
+                {
+                    webClient.Headers["x-auth-token"] = head;//todo:用户Appkey 
+                }
+                webClient.UploadFileAsync(value, fileName);
+                webClient.UploadFileCompleted += (sender, e) =>
+                {
+                    try
+                    {
+                        if (e.Error != null)
+                        {
+                            ("上传过程中出现异常：" + value.ToString() + "出现异常！" + System.Environment.NewLine + e.Error.ToString()).WriteToLog(log4net.Core.Level.Error);
+                        }
+                        webClient.Dispose();
+                    }
+                    catch (Exception ex)
+                    {
+                        ex.ToString();
+                    }
+                };
+            }
+            catch (Exception ex)
+            {
+                ("请求上传文件地址：" + value.ToString() + "出现异常！" + System.Environment.NewLine + ex.ToString()).WriteToLog(log4net.Core.Level.Error);
+            }
+            return webClient;
+        }
+
+        /// <summary>
+        /// 下载文件
+        /// </summary>  
+        /// <param name="value"></param> 
+        /// <param name="fileName"></param> 
+        /// <param name="head"></param>
+        public static WebClient UploadFileAsync(this string value, string fileName, string head = "")
+        {
+            Uri url = new Uri(value);
+            return url.UploadFileAsync(fileName, head);
         }
 
         /// <summary>
@@ -125,22 +205,25 @@ namespace Common
         /// </summary>
         /// <param name="value"></param>
         /// <param name="fileName"></param>
-        public static void DownloadFile(this Uri value, string fileName)
+        /// <param name="head"></param>
+        public static void DownloadFile(this Uri value, string fileName, string head = "")
         {
-            //value.ToString().WriteToLog(log4net.Core.Level.Debug);
+            ("请求下载文件地址：" + value.ToString()).WriteToLog(log4net.Core.Level.Debug);
             try
             {
                 StrongWebClient webClient = new StrongWebClient();
                 webClient.Headers["Content-type"] = "application/octet-stream";
+                if (!String.IsNullOrWhiteSpace(head))
+                {
+                    webClient.Headers["x-auth-token"] = head;//todo:用户Appkey 
+                }
                 webClient.DownloadFile(value, fileName);
                 webClient.Dispose();
             }
             catch (Exception ex)
             {
-                (value.ToString() + System.Environment.NewLine + ex.ToString()).WriteToLog(log4net.Core.Level.Debug);
-                //throw ex;
+                ("下载过程中出现异常：" + value.ToString() + "出现异常！" + System.Environment.NewLine + ex.ToString()).WriteToLog(log4net.Core.Level.Error);
             }
-            GC.Collect();
         }
 
         /// <summary>
@@ -148,70 +231,76 @@ namespace Common
         /// </summary>
         /// <param name="value"></param>
         /// <param name="fileName"></param>
-        public static void DownloadFile(this string value, string fileName)
+        /// <param name="head"></param>
+        public static void DownloadFile(this string value, string fileName, string head = "")
         {
             Uri url = new Uri(value);
-            url.DownloadFile(fileName);
-        }
-        /// <summary>
-        /// 下载文件
-        /// </summary>  
-        /// <param name="value"></param> 
-        /// <param name="fileName"></param>
-        /// <param name="progressChanged"></param>
-        /// <param name="completed"></param>
-        public static void DownloadFileAsync(this Uri value, string fileName, Action<System.Net.DownloadProgressChangedEventArgs> progressChanged, Action completed)
-        {
-            //value.ToString().WriteToLog(log4net.Core.Level.Debug);
-            try
-            {
-                StrongWebClient webClient = new StrongWebClient();
-                webClient.DownloadProgressChanged += (sender, e) =>
-                {
-                    if (progressChanged != null)
-                    {
-                        progressChanged(e);
-                    }
-                };
-                webClient.DownloadFileCompleted += (sender, e) =>
-                {
-                    if (completed != null)
-                    {
-                        completed();
-                    }
-                    webClient.Dispose();
-                };
-                webClient.DownloadFileAsync(value, fileName);
-            }
-            catch (Exception ex)
-            {
-                (value.ToString() + System.Environment.NewLine + ex.ToString()).WriteToLog(log4net.Core.Level.Debug);
-                //throw ex;
-            }
-            GC.Collect();
+            url.DownloadFile(fileName, head);
         }
 
         /// <summary>
         /// 下载文件
         /// </summary>  
         /// <param name="value"></param> 
-        /// <param name="fileName"></param>
-        /// <param name="progressChanged"></param>
-        /// <param name="completed"></param>
-        public static void DownloadFileAsync(this string value, string fileName, Action<System.Net.DownloadProgressChangedEventArgs> progressChanged, Action completed)
+        /// <param name="fileName"></param> 
+        /// <param name="head"></param>
+        public static WebClient DownloadFileAsync(this Uri value, string fileName, string head = "")
+        {
+            ("请求下载文件地址：" + value.ToString()).WriteToLog(log4net.Core.Level.Debug);
+            StrongWebClient webClient = new StrongWebClient();
+            try
+            {
+                webClient.Headers["Content-type"] = "application/octet-stream";
+                if (!String.IsNullOrWhiteSpace(head))
+                {
+                    webClient.Headers["x-auth-token"] = head;//todo:用户Appkey 
+                }
+                webClient.DownloadFileAsync(value, fileName);
+                webClient.DownloadFileCompleted += (sender, e) =>
+                {
+                    try
+                    {
+                        if (e.Error != null)
+                        {
+                            ("下载过程中出现异常：" + value.ToString() + "出现异常！" + System.Environment.NewLine + e.Error.ToString()).WriteToLog(log4net.Core.Level.Error); 
+                        }
+                        webClient.Dispose();
+                    }
+                    catch (Exception ex)
+                    {
+                        ex.ToString();
+                    }
+                };
+            }
+            catch (Exception ex)
+            {
+                ("请求下载文件地址：" + value.ToString() + "出现异常！" + System.Environment.NewLine + ex.ToString()).WriteToLog(log4net.Core.Level.Error);
+            }
+            return webClient;
+        }
+
+        /// <summary>
+        /// 下载文件
+        /// </summary>  
+        /// <param name="value"></param> 
+        /// <param name="fileName"></param> 
+        /// <param name="head"></param>
+        public static WebClient DownloadFileAsync(this string value, string fileName, string head = "")
         {
             Uri url = new Uri(value);
-            url.DownloadFileAsync(fileName, progressChanged, completed);
+            return url.DownloadFileAsync(fileName, head);
         }
 
         /// <summary>
         /// 根据URL得到数据对象
         /// </summary>
         /// <param name="value">URL对象</param>
+        /// <param name="head">头部信息</param>
+        /// <param name="fast">快速访问</param>
         /// <returns></returns>
-        public static string DownloadString(this Uri value)
+        public static string DownloadString(this Uri value, string head = "", bool fast = false)
         {
-            return value.DownloadString("");
+            return value.DownloadString("", head, fast);
         }
 
         /// <summary>
@@ -219,10 +308,12 @@ namespace Common
         /// </summary>
         /// <typeparam name="T">泛型实体类</typeparam>
         /// <param name="value">URL对象</param>
+        /// <param name="head">头部信息</param>
+        /// <param name="fast">快速访问</param>
         /// <returns></returns>
-        public static T DownloadObject<T>(this Uri value) where T : class
+        public static T DownloadObject<T>(this Uri value, string head = "", bool fast = false) where T : class
         {
-            return value.DownloadObject<T>("");
+            return value.DownloadObject<T>("", head, fast);
         }
 
         /// <summary>
@@ -231,10 +322,12 @@ namespace Common
         /// <typeparam name="T">泛型实体类</typeparam>
         /// <param name="value">URL对象</param>
         /// <param name="data">需要提交的数据</param>
+        /// <param name="head">头部信息</param>
+        /// <param name="fast">快速访问</param>
         /// <returns></returns>
-        public static T DownloadObject<T>(this Uri value, string data) where T : class
+        public static T DownloadObject<T>(this Uri value, object data = null, string head = "", bool fast = false) where T : class
         {
-            string strObject = value.DownloadString(data);
+            string strObject = value.DownloadString(data, head, fast);
             T Tobject = strObject.JsParse<T>();
             return Tobject;
         }
@@ -243,10 +336,12 @@ namespace Common
         /// 根据URL字符串得到数据对象
         /// </summary>
         /// <param name="value">URL字符串</param>
+        /// <param name="head">头部信息</param>
+        /// <param name="fast">快速访问</param>
         /// <returns></returns>
-        public static string DownloadString(this string value)
+        public static string DownloadString(this string value, string head = "", bool fast = false)
         {
-            return value.DownloadString("");
+            return value.DownloadString("", head, fast);
         }
 
         /// <summary>
@@ -254,11 +349,13 @@ namespace Common
         /// </summary>
         /// <param name="value">URL字符串</param>
         /// <param name="data">需要提交的数据</param>
+        /// <param name="head">头部信息</param>
+        /// <param name="fast">快速访问</param>
         /// <returns></returns>
-        public static string DownloadString(this string value, string data)
+        public static string DownloadString(this string value, object data = null, string head = "", bool fast = false)
         {
             Uri url = new Uri(value);
-            string strData = url.DownloadString(data);
+            string strData = url.DownloadString(data, head, fast);
             return strData;
         }
 
@@ -267,11 +364,13 @@ namespace Common
         /// </summary>
         /// <param name="value">URL字符串</param>
         /// <param name="data">需要提交的数组</param>
+        /// <param name="head">头部信息</param>
+        /// <param name="fast">快速访问</param>
         /// <returns></returns>
-        public static string DownloadString(this string value, List<string> data)
+        public static string DownloadString(this string value, List<string> data, string head = "", bool fast = false)
         {
             Uri url = new Uri(value);
-            string strData = url.DownloadString(String.Join("&", data.ToArray()));
+            string strData = url.DownloadString(String.Join("&", data.ToArray()), head, fast);
             return strData;
         }
 
@@ -281,12 +380,14 @@ namespace Common
         /// <param name="value">URL字符串</param>
         /// <param name="key">需要提交的数组的Key</param>
         /// <param name="data">需要提交的数组</param>
+        /// <param name="head">头部信息</param>
+        /// <param name="fast">快速访问</param>
         /// <returns></returns>
-        public static string DownloadString<T>(this string value, string key, List<T> data)
+        public static string DownloadString<T>(this string value, string key, List<T> data, string head = "", bool fast = false)
         {
             Uri url = new Uri(value);
             var lstData = data.ConvertAll<string>(o => "key=" + o.JsStringify());
-            string strData = url.DownloadString(String.Join("&", lstData.ToArray()));
+            string strData = url.DownloadString(String.Join("&", lstData.ToArray()), head, fast);
             return strData;
         }
 
@@ -295,10 +396,12 @@ namespace Common
         /// </summary>
         /// <typeparam name="T">泛型实体类</typeparam>
         /// <param name="value">URL字符串</param>
+        /// <param name="head">头部信息</param>
+        /// <param name="fast">快速访问</param>
         /// <returns></returns>
-        public static T DownloadObject<T>(this string value) where T : class
+        public static T DownloadObject<T>(this string value, string head = "", bool fast = false) where T : class
         {
-            return value.DownloadObject<T>("");
+            return value.DownloadObject<T>("", head, fast);
         }
 
         /// <summary>
@@ -307,10 +410,12 @@ namespace Common
         /// <typeparam name="T">泛型实体类</typeparam>
         /// <param name="value">URL字符串</param>
         /// <param name="data">需要提交的数据</param>
+        /// <param name="head">头部信息</param>
+        /// <param name="fast">快速访问</param>
         /// <returns></returns>
-        public static T DownloadObject<T>(this string value, string data) where T : class
+        public static T DownloadObject<T>(this string value, object data = null, string head = "", bool fast = false) where T : class
         {
-            string strObject = value.DownloadString(data);
+            string strObject = value.DownloadString(data, head, fast);
             T Tobject = strObject.JsParse<T>();
             return Tobject;
         }
