@@ -1,22 +1,23 @@
 ﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
 namespace MVVM.Model
 {
     /// <summary>
-    /// 数据验证扩展
+    /// 
     /// </summary>
-    public static class PropertyNameExtension
+    public static class DescriptionDataExtension
     {
         /// <summary>
-        /// 验证方法
+        /// 
         /// </summary>
         /// <typeparam name="T"> </typeparam>
         /// <param name="obj"> </param>
         /// <param name="propertyName"> </param>
         /// <returns> </returns>
-        public static string GetPropertyDisplayName<T>(this T obj, string propertyName) where T : NotifyPropertyBase
+        public static string GetPropertyDescription<T>(this T obj, string propertyName) where T : NotifyPropertyBase
         {
             if (string.IsNullOrEmpty(propertyName))
             {
@@ -26,17 +27,17 @@ namespace MVVM.Model
             PropertyInfo pi = tp.GetProperty(propertyName);
             var value = pi.GetValue(obj, null);
             object[] Attributes = pi.GetCustomAttributes(false);
-            string strName = "";
+            string strDescription = "";
             if (Attributes != null && Attributes.Length > 0)
             {
                 foreach (object attribute in Attributes)
                 {
-                    if (attribute is DisplayAttribute)
+                    if (attribute is DescriptionAttribute)
                     {
                         try
                         {
-                            DisplayAttribute vAttribute = attribute as DisplayAttribute;
-                            strName = vAttribute.Name;
+                            DescriptionAttribute vAttribute = attribute as DescriptionAttribute;
+                            strDescription = vAttribute.Description;
                             break;
                         }
                         catch (Exception ex)
@@ -46,7 +47,7 @@ namespace MVVM.Model
                     }
                 }
             }
-            return strName;
+            return strDescription;
         }
     }
 }

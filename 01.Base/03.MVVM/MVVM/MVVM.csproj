@@ -70,14 +70,16 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\DescriptionData.cs" />
+    <Compile Include="Model\DescriptionDataExtension.cs" />
     <Compile Include="Model\NotifyBaseModelValidationRule.cs" />
-    <Compile Include="Model\PropertyNameDataInfo.cs" />
-    <Compile Include="Model\ValidationDataErrorInfo.cs" />
+    <Compile Include="Model\DisplayNameData.cs" />
+    <Compile Include="Model\ValidationErrorData.cs" />
     <Compile Include="Model\NotifyBaseModel.cs" />
     <Compile Include="Model\NotifyPropertyBaseExtension.cs" />
     <Compile Include="Model\NotifyPropertyBase.cs" />
     <Compile Include="Model\ObservableCollectionExtension.cs" />
-    <Compile Include="Model\PropertyNameExtension.cs" />
+    <Compile Include="Model\DisplayNameDataExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -92,7 +94,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Model\NullValidationAttribute.cs" />
-    <Compile Include="Model\ValidationExtension.cs" />
+    <Compile Include="Model\ValidationErrorDataExtension.cs" />
     <Compile Include="ViewModel\DelegateCommand.cs" />
     <Compile Include="ViewModel\DelegateCommandBase.cs" />
     <Compile Include="ViewModel\IActiveAware.cs" />

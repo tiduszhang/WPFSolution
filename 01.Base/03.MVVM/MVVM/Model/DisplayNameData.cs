@@ -10,7 +10,7 @@ namespace MVVM.Model
     /// <summary>
     /// 属性名称数据
     /// </summary>
-    public class PropertyNameDataInfo : NotifyPropertyBase
+    public class DisplayNameData : NotifyPropertyBase
     {
         /// <summary>
         /// 需要验证的类
@@ -31,7 +31,7 @@ namespace MVVM.Model
         /// <summary>
         /// 构造函数
         /// </summary>
-        public PropertyNameDataInfo()
+        public DisplayNameData()
         {
         }
 

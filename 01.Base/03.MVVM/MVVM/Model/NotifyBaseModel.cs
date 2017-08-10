@@ -10,7 +10,11 @@ using Common;
 namespace MVVM.Model
 {
     /// <summary>
-    /// 实体基类
+    /// 实体基类，可以实现属性修改事件通知
+    /// 附加功能：
+    /// 1、定义属性验证
+    /// 2、定义属性名称
+    /// 3、定义属性描述
     /// </summary>
     public class NotifyBaseModel : NotifyPropertyBase
     {
@@ -66,25 +70,27 @@ namespace MVVM.Model
         /// </summary>
         public NotifyBaseModel()
         {
-            this.ErrorData = new ValidationDataErrorInfo();
-            this.ErrorData.NotifyProperty = this;
-            this.PropertyNameData = new PropertyNameDataInfo();
-            this.PropertyNameData.NotifyProperty = this;
+            this.Error = new ValidationErrorData();
+            this.Error.NotifyProperty = this;
+            this.DisplayName = new DisplayNameData();
+            this.DisplayName.NotifyProperty = this;
+            this.Description = new DescriptionData();
+            this.Description.NotifyProperty = this;
         }
 
         /// <summary>
         /// 错误信息，通过IDataErrorInfo实现
         /// </summary>
         [ScriptIgnore]
-        public ValidationDataErrorInfo ErrorData
+        public ValidationErrorData Error
         {
             get
             {
-                return this.GetValue(o => o.ErrorData);
+                return this.GetValue(o => o.Error);
             }
             set
             {
-                this.SetValue(o => o.ErrorData, value);
+                this.SetValue(o => o.Error, value);
             }
         }
 
@@ -92,18 +98,33 @@ namespace MVVM.Model
         /// 属性名称，可以通过DisplayAttribute标注属性名称
         /// </summary>
         [ScriptIgnore]
-        public PropertyNameDataInfo PropertyNameData
+        public DisplayNameData DisplayName
         {
             get
             {
-                return this.GetValue(o => o.PropertyNameData);
+                return this.GetValue(o => o.DisplayName);
             }
             set
             {
-                this.SetValue(o => o.PropertyNameData, value);
+                this.SetValue(o => o.DisplayName, value);
             }
         }
 
+        /// <summary>
+        /// 属性描述，可以通过DescriptionAttribute标注属性描述
+        /// </summary>
+        [ScriptIgnore]
+        public DescriptionData Description
+        {
+            get
+            {
+                return this.GetValue(o => o.Description);
+            }
+            set
+            {
+                this.SetValue(o => o.Description, value);
+            }
+        }
         /// <summary>
         /// 消息内容，所有错误消息内容。
         /// </summary>
@@ -153,7 +174,7 @@ namespace MVVM.Model
                 {
                     if (pi.Name.ToUpper() != "ITEM")
                     {
-                        string strError = this.ErrorData.Valid(pi.Name);
+                        string strError = this.Error.Valid(pi.Name);
                         if (!String.IsNullOrWhiteSpace(strError))
                         {
                             IsValid = false;
@@ -167,7 +188,7 @@ namespace MVVM.Model
             }
             if (!IsValid)
             {
-                this.Message = this.ErrorData.Error;
+                this.Message = this.Error.Error;
             }
             return IsValid;
         }
@@ -207,13 +228,13 @@ namespace MVVM.Model
         /// </summary>
         public override void Dispose()
         {
-            if (ErrorData != null)
+            if (Error != null)
             {
-                ErrorData.Dispose();
+                Error.Dispose();
             }
-            if (PropertyNameData != null)
+            if (DisplayName != null)
             {
-                PropertyNameData.Dispose();
+                DisplayName.Dispose();
             }
             base.Dispose();
         }

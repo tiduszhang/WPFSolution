@@ -12,7 +12,7 @@ namespace MVVM.Model
     /// <summary>
     /// 验证信息数据
     /// </summary>
-    public class ValidationDataErrorInfo : NotifyPropertyBase, IDataErrorInfo
+    public class ValidationErrorData : NotifyPropertyBase, IDataErrorInfo
     {
         /// <summary>
         /// 需要验证的类
@@ -34,7 +34,7 @@ namespace MVVM.Model
         /// <summary>
         /// 构造函数
         /// </summary>
-        public ValidationDataErrorInfo()
+        public ValidationErrorData()
         {
         }
 

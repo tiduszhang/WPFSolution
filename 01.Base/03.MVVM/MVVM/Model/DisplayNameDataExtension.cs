@@ -5,18 +5,18 @@ using System.Reflection;
 namespace MVVM.Model
 {
     /// <summary>
-    /// 数据验证扩展
+    /// 
     /// </summary>
-    public static class ValidationExtension
+    public static class DisplayNameDataExtension
     {
         /// <summary>
-        /// 验证方法
+        /// 
         /// </summary>
         /// <typeparam name="T"> </typeparam>
         /// <param name="obj"> </param>
         /// <param name="propertyName"> </param>
         /// <returns> </returns>
-        public static string ValidateProperty<T>(this T obj, string propertyName) where T : NotifyPropertyBase
+        public static string GetPropertyDisplayName<T>(this T obj, string propertyName) where T : NotifyPropertyBase
         {
             if (string.IsNullOrEmpty(propertyName))
             {
@@ -26,21 +26,18 @@ namespace MVVM.Model
             PropertyInfo pi = tp.GetProperty(propertyName);
             var value = pi.GetValue(obj, null);
             object[] Attributes = pi.GetCustomAttributes(false);
-            string strErrorMessage = "";
+            string strName = "";
             if (Attributes != null && Attributes.Length > 0)
             {
                 foreach (object attribute in Attributes)
                 {
-                    if (attribute is ValidationAttribute)
+                    if (attribute is DisplayAttribute)
                     {
                         try
-                        {
-                            ValidationAttribute vAttribute = attribute as ValidationAttribute;
-                            if (!vAttribute.IsValid(value))
-                            {
-                                strErrorMessage = !String.IsNullOrWhiteSpace(vAttribute.ErrorMessage) ? vAttribute.ErrorMessage : vAttribute.GetValidationResult(value, new ValidationContext(value, null, null)).ErrorMessage;
-                                break;
-                            }
+                        { 
+                            DisplayAttribute vAttribute = attribute as DisplayAttribute;
+                            strName = vAttribute.Name;
+                            break;
                         }
                         catch (Exception ex)
                         {
@@ -49,7 +46,7 @@ namespace MVVM.Model
                     }
                 }
             }
-            return strErrorMessage;
+            return strName;
         }
     }
 }
