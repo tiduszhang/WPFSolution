@@ -45,7 +45,7 @@ namespace AutoUpdate.Tool
                 CustomResourceDictionary = DialogDictionary,
                 AffirmativeButtonText = "确定",
                 NegativeButtonText = "取消",
-                SuppressDefaultResources = true
+                //SuppressDefaultResources = true
             };
 
         }

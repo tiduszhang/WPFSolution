@@ -30,7 +30,7 @@ namespace MaterialDesign
                 {
                     CustomResourceDictionary = DialogDictionary,
                     AffirmativeButtonText = "确定",
-                    SuppressDefaultResources = true
+                    //SuppressDefaultResources = true
                 };
             }
         }
@@ -47,7 +47,7 @@ namespace MaterialDesign
                     CustomResourceDictionary = DialogDictionary,
                     AffirmativeButtonText = "确定",
                     NegativeButtonText = "取消",
-                    SuppressDefaultResources = true
+                    //SuppressDefaultResources = true
                 };
             }
         }
@@ -64,7 +64,7 @@ namespace MaterialDesign
                     CustomResourceDictionary = DialogDictionary,
                     AffirmativeButtonText = "是",
                     NegativeButtonText = "否",
-                    SuppressDefaultResources = true
+                    //SuppressDefaultResources = true
                 };
             }
         }
