@@ -8,9 +8,9 @@ using System.Web.Script.Serialization;
 namespace MVVM.Model
 {
     /// <summary>
-    /// 属性名称
+    /// 属性短名称
     /// </summary>
-    public class DisplayNameData : NotifyPropertyBase
+    public class ShortNameData : NotifyPropertyBase
     {
         /// <summary>
         /// 需要验证的类
@@ -31,7 +31,7 @@ namespace MVVM.Model
         /// <summary>
         /// 构造函数
         /// </summary>
-        public DisplayNameData()
+        public ShortNameData()
         {
         }
 
@@ -48,7 +48,7 @@ namespace MVVM.Model
                 string propertyNameValue = "";
                 if (NotifyProperty != null)
                 {
-                    propertyNameValue = NotifyProperty.GetPropertyDisplayName(propertyName);
+                    propertyNameValue = NotifyProperty.GetPropertyShortName(propertyName);
                 }
                 return propertyNameValue;
             }

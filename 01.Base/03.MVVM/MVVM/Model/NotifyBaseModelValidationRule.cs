@@ -21,7 +21,7 @@ namespace MVVM.Model
         {
             if (value is NotifyBaseModel)
             {
-                return new ValidationResult((value as NotifyBaseModel).Valid(), (value as NotifyBaseModel).Message);
+                return new ValidationResult((value as NotifyBaseModel).Valid(), (value as NotifyBaseModel).ErrorMessage);
             }
             return ValidationResult.ValidResult;
             //throw new NotImplementedException();

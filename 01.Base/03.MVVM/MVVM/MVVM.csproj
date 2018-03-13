@@ -72,6 +72,10 @@
   <ItemGroup>
     <Compile Include="Model\DescriptionData.cs" />
     <Compile Include="Model\DescriptionDataExtension.cs" />
+    <Compile Include="Model\PromptData.cs" />
+    <Compile Include="Model\ShortNameData.cs" />
+    <Compile Include="Model\PromptDataExtension.cs" />
+    <Compile Include="Model\ShortNameDataExtension.cs" />
     <Compile Include="Model\NotifyBaseModelValidationRule.cs" />
     <Compile Include="Model\DisplayNameData.cs" />
     <Compile Include="Model\ValidationErrorData.cs" />

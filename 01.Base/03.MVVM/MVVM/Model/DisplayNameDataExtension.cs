@@ -34,7 +34,7 @@ namespace MVVM.Model
                     if (attribute is DisplayAttribute)
                     {
                         try
-                        { 
+                        {
                             DisplayAttribute vAttribute = attribute as DisplayAttribute;
                             strName = vAttribute.Name;
                             break;

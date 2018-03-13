@@ -18,53 +18,6 @@ namespace MVVM.Model
     /// </summary>
     public class NotifyBaseModel : NotifyPropertyBase
     {
-        ///// <summary>
-        ///// ID
-        ///// </summary>
-        //public virtual string ID
-        //{
-        //    get
-        //    {
-        //        return this.GetValue(o => o.ID);
-        //    }
-        //    set
-        //    {
-        //        this.SetValue(o => o.ID, value);
-        //    }
-        //}
-
-        ///// <summary>
-        ///// 存储路径
-        ///// </summary>
-        //[ScriptIgnore]
-        //public virtual string Path
-        //{
-        //    get
-        //    {
-        //        return this.GetValue(o => o.ID);
-        //    }
-        //    set
-        //    {
-        //        this.SetValue(o => o.ID, value);
-        //    }
-        //}
-
-        ///// <summary>
-        ///// 文件名
-        ///// </summary>
-        //[ScriptIgnore]
-        //public virtual string FileName
-        //{
-        //    get
-        //    {
-        //        return this.GetValue(o => o.ID);
-        //    }
-        //    set
-        //    {
-        //        this.SetValue(o => o.ID, value);
-        //    }
-        //}
-
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -72,8 +25,16 @@ namespace MVVM.Model
         {
             this.Error = new ValidationErrorData();
             this.Error.NotifyProperty = this;
+
             this.DisplayName = new DisplayNameData();
             this.DisplayName.NotifyProperty = this;
+
+            this.ShortName = new ShortNameData();
+            this.ShortName.NotifyProperty = this;
+
+            this.Prompt = new PromptData();
+            this.Prompt.NotifyProperty = this;
+
             this.Description = new DescriptionData();
             this.Description.NotifyProperty = this;
         }
@@ -111,7 +72,39 @@ namespace MVVM.Model
         }
 
         /// <summary>
-        /// 属性描述，可以通过DescriptionAttribute标注属性描述
+        /// 属性短名称，可以通过DisplayAttribute标注属性名称
+        /// </summary>
+        [ScriptIgnore]
+        public ShortNameData ShortName
+        {
+            get
+            {
+                return this.GetValue(o => o.ShortName);
+            }
+            set
+            {
+                this.SetValue(o => o.ShortName, value);
+            }
+        }
+
+        /// <summary>
+        /// 属性水印提示，可以通过DisplayAttribute标注属性名称
+        /// </summary>
+        [ScriptIgnore]
+        public PromptData Prompt
+        {
+            get
+            {
+                return this.GetValue(o => o.Prompt);
+            }
+            set
+            {
+                this.SetValue(o => o.Prompt, value);
+            }
+        }
+
+        /// <summary>
+        /// 属性描述，可以通过DisplayAttribute标注属性描述
         /// </summary>
         [ScriptIgnore]
         public DescriptionData Description
@@ -125,19 +118,20 @@ namespace MVVM.Model
                 this.SetValue(o => o.Description, value);
             }
         }
+
         /// <summary>
         /// 消息内容，所有错误消息内容。
         /// </summary>
         [ScriptIgnore]
-        public virtual string Message
+        public virtual string ErrorMessage
         {
             get
             {
-                return this.GetValue(o => o.Message);
+                return this.GetValue(o => o.ErrorMessage);
             }
             set
             {
-                this.SetValue(o => o.Message, value);
+                this.SetValue(o => o.ErrorMessage, value);
             }
         }
 
@@ -164,7 +158,7 @@ namespace MVVM.Model
         /// <returns> 验证是否通过，若通过则返回 true，否则为false。 </returns>
         public virtual bool Valid()
         {
-            this.Message = "";
+            this.ErrorMessage = "";
             Type tp = this.GetType();
             PropertyInfo[] pis = tp.GetProperties();
             IsValid = true;
@@ -188,7 +182,7 @@ namespace MVVM.Model
             }
             if (!IsValid)
             {
-                this.Message = this.Error.Error;
+                this.ErrorMessage = this.Error.Error;
             }
             return IsValid;
         }
@@ -218,7 +212,7 @@ namespace MVVM.Model
             string message = Valided.Invoke(this as T);
             if (!String.IsNullOrWhiteSpace(message))
             {
-                this.Message = message;
+                this.ErrorMessage = message;
                 return false;
             }
             return true;
@@ -236,32 +230,19 @@ namespace MVVM.Model
             {
                 DisplayName.Dispose();
             }
+            if (ShortName != null)
+            {
+                ShortName.Dispose();
+            }
+            if (Prompt != null)
+            {
+                Prompt.Dispose();
+            }
+            if (Description != null)
+            {
+                Description.Dispose();
+            }
             base.Dispose();
         }
-
-
-        ///// <summary>
-        ///// 保存
-        ///// </summary>
-        //public void Save()
-        //{
-        //    if (String.IsNullOrWhiteSpace(this.ID))
-        //    {
-        //        this.ID = Guid.NewGuid().ToString("N");
-        //    }
-
-        //    if (String.IsNullOrWhiteSpace(Path))
-        //    {
-        //        Path = WorkPath.ApplicationWorkPath +@"\" + this.GetType().Name + @"\";
-        //    }
-
-        //    if (String.IsNullOrWhiteSpace(FileName))
-        //    {
-        //        FileName = "{0}.json";
-        //        FileName = String.Format(FileName, this.ID);
-        //    }
-
-        //    this.SaveJsonFile(Path, FileName);
-        //} 
     }
 }

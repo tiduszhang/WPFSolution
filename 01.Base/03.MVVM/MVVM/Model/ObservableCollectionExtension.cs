@@ -158,7 +158,7 @@ namespace MVVM.Model
                 {
                     if (!o.Valid())
                     {
-                        return new System.ComponentModel.DataAnnotations.ValidationResult(o.Message);
+                        return new System.ComponentModel.DataAnnotations.ValidationResult(o.ErrorMessage);
                     }
                 }
             }

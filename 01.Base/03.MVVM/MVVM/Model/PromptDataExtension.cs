@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
@@ -8,7 +7,7 @@ namespace MVVM.Model
     /// <summary>
     /// 
     /// </summary>
-    public static class DescriptionDataExtension
+    public static class PromptDataExtension
     {
         /// <summary>
         /// 
@@ -17,7 +16,7 @@ namespace MVVM.Model
         /// <param name="obj"> </param>
         /// <param name="propertyName"> </param>
         /// <returns> </returns>
-        public static string GetPropertyDescription<T>(this T obj, string propertyName) where T : NotifyPropertyBase
+        public static string GetPropertyPromptData<T>(this T obj, string propertyName) where T : NotifyPropertyBase
         {
             if (string.IsNullOrEmpty(propertyName))
             {
@@ -27,7 +26,7 @@ namespace MVVM.Model
             PropertyInfo pi = tp.GetProperty(propertyName);
             var value = pi.GetValue(obj, null);
             object[] Attributes = pi.GetCustomAttributes(false);
-            string strDescription = "";
+            string strPromptData = "";
             if (Attributes != null && Attributes.Length > 0)
             {
                 foreach (object attribute in Attributes)
@@ -37,7 +36,7 @@ namespace MVVM.Model
                         try
                         {
                             DisplayAttribute vAttribute = attribute as DisplayAttribute;
-                            strDescription = vAttribute.Description;
+                            strPromptData = vAttribute.Prompt;
                             break;
                         }
                         catch (Exception ex)
@@ -47,7 +46,7 @@ namespace MVVM.Model
                     }
                 }
             }
-            return strDescription;
+            return strPromptData;
         }
     }
 }
