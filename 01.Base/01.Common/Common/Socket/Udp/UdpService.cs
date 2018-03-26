@@ -149,8 +149,8 @@ namespace Common
                         ex.ToString().WriteToLog(log4net.Core.Level.Error);
                     }
                     finally
-                    {
-                        server.Close();
+                    { 
+                        //server.Close();
                     }
                 });
             }
