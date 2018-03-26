@@ -54,7 +54,7 @@ namespace Common
         /// 开始监听，启用监听时使用，用于设置端口号开启服务。
         /// </summary>
         /// <param name="port"></param>
-        public static void Start(int port = 12333)
+        public static void Start(int port = 12334)
         {
             var udpService = GetInstence();
             udpService.Port = port;
