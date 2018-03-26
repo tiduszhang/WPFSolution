@@ -36,7 +36,7 @@ namespace MVVM.Model
                         try
                         {
                             DisplayAttribute vAttribute = attribute as DisplayAttribute;
-                            strShortName = vAttribute.ShortName; 
+                            strShortName = vAttribute.GetShortName(); 
                             break;
                         }
                         catch (Exception ex)
