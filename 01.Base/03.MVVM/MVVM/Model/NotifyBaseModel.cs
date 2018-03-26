@@ -74,7 +74,7 @@ namespace MVVM.Model
         /// <summary>
         /// 属性短名称，可以通过DisplayAttribute标注属性名称
         /// </summary>
-        [ScriptIgnore]
+        [ScriptIgnore]  
         public ShortNameData ShortName
         {
             get
