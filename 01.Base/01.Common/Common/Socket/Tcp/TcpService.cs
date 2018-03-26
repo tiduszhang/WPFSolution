@@ -115,39 +115,59 @@ namespace Common
                 System.Threading.Tasks.Task.Factory.StartNew(() =>
                 {
                     NetworkStream ns = client.GetStream();
-                    MemoryStream ms = new MemoryStream();
+                    int bufferSize = 1024;
+                    byte[] bData = new byte[bufferSize];
+                    //MemoryStream ms = new MemoryStream();
                     try
                     {
-                        byte[] bData = new byte[1024];
-                        int length = 0;
-                        while ((length = ns.Read(bData, 0, bData.Length)) > 0)
+                        do
                         {
-                            ms.Write(bData, 0, length);
-                        }
-                        byte[] bValue = ms.ToArray();
-                        Message message = bValue.ConvertToObject<Message>();
-                        if (message != null)
-                        {
-                            message.IP = (client.Client.RemoteEndPoint as IPEndPoint).Address.ToString();
-                            message.Port = (client.Client.RemoteEndPoint as IPEndPoint).Port;
-                        }
-                        System.Windows.Application.Current.Dispatcher.Invoke(new Action(() =>
-                        {
-                            if (ReceiveMessage != null)
+                            //while ((length = ns.Read(bData, 0, bData.Length)) > 0)
+                            //{
+                            //    ms.Write(bData, 0, length);
+                            //} 
+                            bufferSize = ns.Read(bData, 0, bData.Length);
+                            //ms.Write(bData, 0, length);
+                            if (bufferSize <= 0)
                             {
-                                ReceiveMessage(message);
+                                continue;
                             }
-                        }));
+                            byte[] bValue = new byte[bufferSize];
+                            Array.Copy(bData, bValue, bufferSize); //ms.ToArray();
+                            Array.Clear(bData, 0, bData.Length);
+
+                            Message message = bValue.ConvertToObject<Message>();
+                            Array.Clear(bValue, 0, bValue.Length);
+
+                            if (message != null)
+                            {
+                                message.IP = (client.Client.RemoteEndPoint as IPEndPoint).Address.ToString();
+                                message.Port = (client.Client.RemoteEndPoint as IPEndPoint).Port;
+                            }
+                            System.Windows.Application.Current.Dispatcher.Invoke(new Action(() =>
+                            {
+                                if (ReceiveMessage != null)
+                                {
+                                    ReceiveMessage(message);
+                                }
+                            }));
+                            
+                            //ms.Flush();
+                            ns.Flush();
+
+                        } while (!((client.Client.Poll(500, SelectMode.SelectRead) && (client.Client.Available == 0)) || !client.Client.Connected));
+
+                        ("客户端<" + (client.Client.RemoteEndPoint as IPEndPoint).Address.ToString() + ">已断开！").WriteToLog();
                     }
                     catch (Exception ex)
                     {
-                        ex.ToString();
+                        ("服务器监听异常，异常信息：" + ex.ToString()).WriteToLog(log4net.Core.Level.Error);
                     }
                     finally
                     {
-                        ms.Close();
-                        ms.Dispose();
-                        ms = null;
+                        //ms.Close();
+                        //ms.Dispose();
+                        //ms = null;
 
                         ns.Close();
                         ns.Dispose();
@@ -157,12 +177,19 @@ namespace Common
                 });
             }
             catch (Exception ex)
-            { 
-                ex.ToString().WriteToLog(log4net.Core.Level.Error);
+            {
+                ("服务器监听异常，异常信息：" + ex.ToString()).WriteToLog(log4net.Core.Level.Error);
             }
             finally
-            { 
-                IAsyncResult result = server.BeginAcceptTcpClient(new AsyncCallback(Acceptor), server);
+            {
+                try
+                {
+                    IAsyncResult result = server.BeginAcceptTcpClient(new AsyncCallback(Acceptor), server);
+                }
+                catch (Exception ex)
+                {
+                    ("服务器监听异常停止，异常信息：" + ex.ToString()).WriteToLog(log4net.Core.Level.Error);
+                }
             }
         }
 
