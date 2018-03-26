@@ -122,18 +122,19 @@ namespace Common
                     {
                         do
                         {
+                            int length = 0;
                             //while ((length = ns.Read(bData, 0, bData.Length)) > 0)
                             //{
                             //    ms.Write(bData, 0, length);
                             //} 
-                            bufferSize = ns.Read(bData, 0, bData.Length);
+                            length = ns.Read(bData, 0, bData.Length);
                             //ms.Write(bData, 0, length);
-                            if (bufferSize <= 0)
+                            if (length <= 0)
                             {
                                 continue;
                             }
-                            byte[] bValue = new byte[bufferSize];
-                            Array.Copy(bData, bValue, bufferSize); //ms.ToArray();
+                            byte[] bValue = new byte[length];
+                            Array.Copy(bData, bValue, length); //ms.ToArray();
                             Array.Clear(bData, 0, bData.Length);
 
                             Message message = bValue.ConvertToObject<Message>();
