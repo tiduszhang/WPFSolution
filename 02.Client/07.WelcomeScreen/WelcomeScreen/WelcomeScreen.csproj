@@ -109,6 +109,10 @@
       <Project>{5FB04EC6-4B73-49BE-B138-B27E8FC3FC91}</Project>
       <Name>MVVM</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\01.Base\04.DB\Common.DB\Common.DB.csproj">
+      <Project>{3e458b3e-b287-46cd-9b40-968d06e47a4b}</Project>
+      <Name>Common.DB</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Page Include="test\WinTest.xaml">

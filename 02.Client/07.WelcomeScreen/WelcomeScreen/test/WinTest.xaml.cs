@@ -11,7 +11,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Common;
+using Common.DB;
 using MVVM;
+using MVVM.Controls;
 
 namespace WelcomeScreen
 {
@@ -43,10 +45,26 @@ namespace WelcomeScreen
             if (this.IsInDesignMode())
             {
                 return;
-            } 
+            }
+
+            //分页DEMO
+            var pageViewModel = new PageViewModel<EntityBase>();
+            pageViewModel.PageSize = 20;
+            this.pageView.PageViewModel = pageViewModel;
+            dataGrid.ItemsSource = pageViewModel.ObservableCollectionObject;
+            pageViewModel.ChangePageFun = () =>
+            {
+                PageData<EntityBase> pageData = NoSQLHelper.LoadByPage<EntityBase>(pageViewModel.PageIndex, pageViewModel.PageSize);
+                pageData.FillPage(pageViewModel);
+                return pageData.QueryData;
+            };
+            pageViewModel.ChangePage();
+            //分页DEMO
+
+
             "加载完成".WriteToLog(log4net.Core.Level.Info);
         }
-         
+
 
         /// <summary>
         /// 鼠标拖拽界面

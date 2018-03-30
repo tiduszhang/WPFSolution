@@ -335,12 +335,15 @@ namespace MVVM.Controls
         /// </summary>
         private void Fill(List<T> QueryData)
         {
-            for (int i = ObservableCollectionObject.Count - 1; ObservableCollectionObject.Count == 0; i--)
+            if (ObservableCollectionObject.Count > 0)
             {
-                ObservableCollectionObject.Remove(ObservableCollectionObject[i]);
+                for (int i = ObservableCollectionObject.Count - 1; ObservableCollectionObject.Count == 0; i--)
+                {
+                    ObservableCollectionObject.Remove(ObservableCollectionObject[i]);
+                }
             }
 
-            if(QueryData == null)
+            if (QueryData == null || QueryData.Count <= 0)
             {
                 return;
             }

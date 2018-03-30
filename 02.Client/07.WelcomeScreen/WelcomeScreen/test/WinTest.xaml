@@ -36,7 +36,7 @@
             </WrapPanel>
         </ScrollViewer>-->
 
-        <DataGrid  >
+        <DataGrid Name="dataGrid" >
             <DataGrid.Columns>
                 <DataGridTextColumn  Width="*" Header="表头1"/>
                 <DataGridTextColumn  Width="*" Header="表头2"/>
@@ -46,16 +46,6 @@
                 <DataGridTextColumn  Width="*" Header="表头6"/>
                 <DataGridTextColumn  Width="*" Header="表头7"/>
             </DataGrid.Columns>
-            <DataObject/>
-            <DataObject/>
-            <DataObject/>
-            <DataObject/>
-            <DataObject/>
-            <DataObject/>
-            <DataObject/>
-            <DataObject/>
-            <DataObject/>
-            <DataObject/>
         </DataGrid>
     </Grid>
 </Window>
