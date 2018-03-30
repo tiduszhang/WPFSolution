@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace MVVM.Controls
 {
@@ -158,7 +159,7 @@ namespace MVVM.Controls
         public virtual void ChangePaged()
         {
             if (this.PageSize > 0)
-            { 
+            {
                 //计算总页数
                 this.TotalPageCount = (this.TotalCount / this.PageSize) + (this.TotalCount % this.PageSize > 0 ? 1 : 0);
             }
@@ -281,16 +282,10 @@ namespace MVVM.Controls
         {
             base.ChangePaging();
 
-            IList<T> ListModel = this.ChangePageFun?.Invoke();
-            if (ListModel != null)
-            {
-                ListModel.ToList().ForEach(o => ObservableCollectionObject.Add(o));
-                //ObservableCollectionObject = ListModel.ToObservableCollection();
-            }
-            else
-            {
-                ObservableCollectionObject.Clear();
-            }
+            //调用执行查询方法，并接受返回值
+            List<T> QueryData = this.ChangePageFun?.Invoke();
+            //填充数据
+            Fill(QueryData);
 
             if (ObservableCollectionObject.Count > 0 && this.PageIndex <= 0)
             {
@@ -313,13 +308,13 @@ namespace MVVM.Controls
         /// <summary>
         /// 翻页查询扩展方法
         /// </summary>
-        public Func<IList<T>> ChangePageFun;
+        public Func<List<T>> ChangePageFun;
 
         /// <summary>
         /// 分页绑定
         /// </summary>
         /// <param name="fun">翻页查询扩展方法</param>
-        public virtual void ChangePage(Func<IList<T>> fun)
+        public virtual void ChangePage(Func<List<T>> fun)
         {
             ChangePageFun = fun;
 
@@ -330,9 +325,30 @@ namespace MVVM.Controls
         /// 将数据转换成列表
         /// </summary>
         /// <returns></returns>
-        public virtual IList<T> ToList()
+        public virtual List<T> ToList()
         {
             return ObservableCollectionObject.ToList();
+        }
+
+        /// <summary>
+        /// 填充数据到绑定结果集中
+        /// </summary>
+        private void Fill(List<T> QueryData)
+        {
+            for (int i = ObservableCollectionObject.Count - 1; ObservableCollectionObject.Count == 0; i--)
+            {
+                ObservableCollectionObject.Remove(ObservableCollectionObject[i]);
+            }
+
+            if(QueryData == null)
+            {
+                return;
+            }
+
+            QueryData.ForEach(o =>
+            {
+                ObservableCollectionObject.Add(o);
+            });
         }
     }
 }

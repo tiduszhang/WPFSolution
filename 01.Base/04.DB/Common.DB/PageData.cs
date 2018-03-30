@@ -9,6 +9,8 @@
 /// @date 2016/12/05 11:18:19
 //
 //----------------------------------------------------------------*/
+using MVVM.Controls;
+using MVVM.Model;
 using System.Collections.Generic;
 
 namespace Common
@@ -22,41 +24,15 @@ namespace Common
         /// <summary>
         /// 当前页码
         /// </summary>
-        private int _PageIndex = 0;
-
-        /// <summary>
-        /// 每页显示条数
-        /// </summary>
-        private int _PageSize = 0;
-
-        /// <summary>
-        /// 总页数
-        /// </summary>
-        private int _TotlePage = 0;
-
-        /// <summary>
-        /// 总条数
-        /// </summary>
-        private int _TotleCount = 0;
-
-        /// <summary>
-        /// 当前页数据
-        /// </summary>
-        private List<T> _Data = null;
-
-        /// <summary>
-        /// 当前页码
-        /// </summary>
         public int PageIndex
         {
             get
             {
-                return _PageIndex;
+                return this.GetValue(o => o.PageIndex);
             }
-
             set
             {
-                _PageIndex = value;
+                this.SetValue(o => o.PageIndex, value);
             }
         }
 
@@ -67,61 +43,69 @@ namespace Common
         {
             get
             {
-                return _PageSize;
+                return this.GetValue(o => o.PageSize);
             }
-
             set
             {
-                _PageSize = value;
+                this.SetValue(o => o.PageSize, value);
             }
         }
 
         /// <summary>
         /// 总页数
         /// </summary>
-        public int TotlePage
+        public int TotalPageCount
         {
             get
             {
-                return _TotlePage;
+                return this.GetValue(o => o.TotalPageCount);
             }
-
             set
             {
-                _TotlePage = value;
+                this.SetValue(o => o.TotalPageCount, value);
             }
         }
 
         /// <summary>
         /// 总条数
         /// </summary>
-        public int TotleCount
+        public int TotalCount
         {
             get
             {
-                return _TotleCount;
+                return this.GetValue(o => o.TotalCount);
             }
-
             set
             {
-                _TotleCount = value;
+                this.SetValue(o => o.TotalCount, value);
             }
         }
 
         /// <summary>
         /// 当前页数据
         /// </summary>
-        public List<T> Data
+        public List<T> QueryData
         {
             get
             {
-                return _Data;
+                return this.GetValue(o => o.QueryData);
             }
-
             set
             {
-                _Data = value;
+                this.SetValue(o => o.QueryData, value);
             }
         }
+         
+        /// <summary>
+        /// 把分页信息设置到PageViewModel中
+        /// </summary>
+        /// <param name="pageViewModel"></param>
+        public void FillPage(PageViewModel<T> pageViewModel)
+        {
+            pageViewModel.PageIndex = this.PageIndex;
+            pageViewModel.TotalCount = this.TotalCount;
+            pageViewModel.TotalPageCount = this.TotalPageCount;
+        }
+         
     }
 }

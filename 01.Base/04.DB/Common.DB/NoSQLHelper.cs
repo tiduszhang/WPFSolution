@@ -158,22 +158,22 @@ namespace Common.DB
             var table = dataBase.GetCollection<string>(typeof(T).Name + MarkId);
             if (func != null)
             {
-                pagedata.TotleCount = (int)table.Find(o => func(o.JsParse<T>())).Count();
+                pagedata.TotalCount = (int)table.Find(o => func(o.JsParse<T>())).Count();
             }
             else
             {
-                pagedata.TotleCount = (int)table.Count();
+                pagedata.TotalCount = (int)table.Count();
             }
-            if (pagedata.TotleCount > 0)
+            if (pagedata.TotalCount > 0)
             {
                 if (pagedata.PageSize <= 0)
                 {
                     pagedata.PageSize = 1;
                 }
-                pagedata.TotlePage = (int)Math.Ceiling((double)(pagedata.TotleCount / pagedata.PageSize));
-                if (pagedata.PageIndex > pagedata.TotlePage)
+                pagedata.TotalPageCount = (int)Math.Ceiling((double)(pagedata.TotalCount / pagedata.PageSize));
+                if (pagedata.PageIndex > pagedata.TotalPageCount)
                 {
-                    pagedata.PageIndex = pagedata.TotlePage;
+                    pagedata.PageIndex = pagedata.TotalPageCount;
                 }
                 else if (pagedata.PageIndex < 0)
                 {
@@ -181,19 +181,19 @@ namespace Common.DB
                 }
                 if (func != null)
                 {
-                    pagedata.Data = table.Find(o => func(o.JsParse<T>()), (pagedata.PageIndex - 1) * pagedata.PageSize, pagedata.PageSize).Select(o => o.JsParse<T>()).ToList();
+                    pagedata.QueryData = table.Find(o => func(o.JsParse<T>()), (pagedata.PageIndex - 1) * pagedata.PageSize, pagedata.PageSize).Select(o => o.JsParse<T>()).ToList();
                 }
                 else
                 {
-                    pagedata.Data = table.Find(o => true, (pagedata.PageIndex - 1) * pagedata.PageSize, pagedata.PageSize).Select(o => o.JsParse<T>()).ToList();
+                    pagedata.QueryData = table.Find(o => true, (pagedata.PageIndex - 1) * pagedata.PageSize, pagedata.PageSize).Select(o => o.JsParse<T>()).ToList();
                 }
             }
             else
             {
-                pagedata.TotleCount = 0;
-                pagedata.TotlePage = 0;
+                pagedata.TotalCount = 0;
+                pagedata.TotalPageCount = 0;
                 pagedata.PageIndex = 0;
-                pagedata.Data = new List<T>();
+                pagedata.QueryData = new List<T>();
             }
             return pagedata;
         }
