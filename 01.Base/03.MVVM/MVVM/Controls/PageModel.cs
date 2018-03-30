@@ -157,8 +157,11 @@ namespace MVVM.Controls
         /// </summary>
         public virtual void ChangePaged()
         {
-            //计算总页数
-            this.TotalPageCount = (this.TotalCount / this.PageSize) + (this.TotalCount % this.PageSize > 0 ? 1 : 0);
+            if (this.PageSize > 0)
+            { 
+                //计算总页数
+                this.TotalPageCount = (this.TotalCount / this.PageSize) + (this.TotalCount % this.PageSize > 0 ? 1 : 0);
+            }
 
             this.CanGo = true;
             this.CanPrev = true;

@@ -7,7 +7,7 @@
              x:Name="controlBase" x:Class="MVVM.Controls.PageView"
              mc:Ignorable="d" >
     <WrapPanel  DataContext="{Binding PageViewModel, ElementName=controlBase}">
-        <TextBlock x:Name="lblinfo"
+        <TextBlock x:Name="lblinfo"  
 			HorizontalAlignment="Center"
 			VerticalAlignment="Center"
 			Text="{Binding PageInfo}"
@@ -39,7 +39,7 @@
             IsEnabled="{Binding CanNext}"
 			Style="{DynamicResource MaterialDesignFlatButton}"
             Command="{Binding ChangePage, ElementName=controlBase, Mode=OneWay}"
-            CommandParameter="{Binding Mode=OneWay, RelativeSource={RelativeSource Self}}" /> 
+            CommandParameter="{Binding Mode=OneWay, RelativeSource={RelativeSource Self}}" />
         <Label x:Name="label3" 
 			HorizontalAlignment="Center"
 			VerticalAlignment="Center"
@@ -54,7 +54,7 @@
 			HorizontalAlignment="Center"
 			VerticalAlignment="Center"
 			Content="页" />
-        
+
         <Button x:Name="btnGo" 
 			VerticalAlignment="Center"
 			Content="转到"

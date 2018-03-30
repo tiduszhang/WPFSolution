@@ -17,7 +17,7 @@
         <Label Content="这是一个窗口" Grid.Row="1"/>
         <Label Content="这是一个窗口" Grid.Row="2"/>
 
-        <Base:PageView Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" />
+        <Base:PageView x:Name="pageView" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" />
         <WrapPanel  Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" >
             <Button Name="btn1"  Content="1" Click="btn1_Click" />
             <Button Name="btn2"  Content="2" Click="btn2_Click"/>

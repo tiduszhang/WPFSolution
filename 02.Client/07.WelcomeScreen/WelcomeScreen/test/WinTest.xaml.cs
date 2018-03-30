@@ -43,10 +43,10 @@ namespace WelcomeScreen
             if (this.IsInDesignMode())
             {
                 return;
-            }
-
+            } 
             "加载完成".WriteToLog(log4net.Core.Level.Info);
         }
+         
 
         /// <summary>
         /// 鼠标拖拽界面

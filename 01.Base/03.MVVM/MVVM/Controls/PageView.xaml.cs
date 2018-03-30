@@ -42,7 +42,7 @@ namespace MVVM.Controls
         /// <summary>
         /// 绑定声明
         /// </summary>
-        public static readonly DependencyProperty PageModelDependencyProperty = DependencyProperty.Register("PageModel", typeof(PageModel), typeof(PageView));
+        public static readonly DependencyProperty PageModelDependencyProperty = DependencyProperty.Register("PageViewModel", typeof(PageModel), typeof(PageView));
 
         /// <summary>
         /// 分页实体
