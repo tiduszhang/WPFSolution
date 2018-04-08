@@ -2,7 +2,9 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"     
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"   
+        xmlns:control="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:shared="http://metro.mahapps.com/winfx/xaml/shared"
         xmlns:Base="http://schemas.strongit.com.cn/Base"     
         x:Class="WelcomeScreen.WinTest"
         mc:Ignorable="d" SnapsToDevicePixels="True" UseLayoutRounding="True" 
@@ -12,10 +14,20 @@
             <RowDefinition  />
             <RowDefinition  />
             <RowDefinition  />
+            <RowDefinition  />
         </Grid.RowDefinitions>
-        <Label Content="这是一个窗口" Grid.Row="0"/>
-        <Label Content="这是一个窗口" Grid.Row="1"/>
-        <Label Content="这是一个窗口" Grid.Row="2"/>
+        <Grid Grid.Row="3" Name="grid1">
+            <Grid.RowDefinitions>
+                <RowDefinition  />
+                <RowDefinition  />
+                <RowDefinition  />
+                <RowDefinition  />
+            </Grid.RowDefinitions>
+            <Label Content="这是一个窗口" Grid.Row="0"/>
+            <Label Content="这是一个窗口" Grid.Row="1"/>
+            <Label Content="{Binding DisplayName[TTTTT]}" Grid.Row="2"  />
+            <Label Content="{Binding  TTTTT}" Grid.Row="3" />
+        </Grid>
 
         <Base:PageView x:Name="pageView" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" />
         <WrapPanel  Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" >
@@ -36,16 +48,29 @@
             </WrapPanel>
         </ScrollViewer>-->
 
-        <DataGrid Name="dataGrid" >
+        <DataGrid Name="dataGrid" AutoGenerateColumns="False" >
             <DataGrid.Columns>
-                <DataGridTextColumn  Width="*" Header="表头1"/>
-                <DataGridTextColumn  Width="*" Header="表头2"/>
-                <DataGridTextColumn  Width="*" Header="表头3"/>
-                <DataGridTextColumn  Width="*" Header="表头4"/>
-                <DataGridTextColumn  Width="*" Header="表头5"/>
-                <DataGridTextColumn  Width="*" Header="表头6"/>
-                <DataGridTextColumn  Width="*" Header="表头7"/>
+                <DataGridTextColumn  Header="{Binding ItemsSource[0].DisplayName[TTTTT], ElementName=dataGrid}"  Binding="{Binding TTTTT}" Width="*"/>
+                <DataGridTemplateColumn Width="*">
+                    <DataGridTemplateColumn.Header>
+                        <TextBlock Text="{Binding ItemsSource[0].DisplayName[TTTTT], ElementName=dataGrid}"  />
+                    </DataGridTemplateColumn.Header>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{Binding DisplayName[TTTTT]}"  Grid.Column="0" />
+                                <TextBlock Text="{Binding  TTTTT}" Grid.Column="1" />
+                            </Grid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
+
+
     </Grid>
 </Window>

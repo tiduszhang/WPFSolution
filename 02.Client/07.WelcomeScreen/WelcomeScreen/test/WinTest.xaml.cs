@@ -1,19 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using Common;
-using Common.DB;
 using MVVM;
-using MVVM.Controls;
+using MVVM.Model;
 
 namespace WelcomeScreen
 {
@@ -47,21 +38,25 @@ namespace WelcomeScreen
                 return;
             }
 
-            //分页DEMO
-            var pageViewModel = new PageViewModel<EntityBase>();
-            pageViewModel.PageSize = 20;
-            this.pageView.PageViewModel = pageViewModel;
-            dataGrid.ItemsSource = pageViewModel.ObservableCollectionObject;
-            pageViewModel.ChangePageFun = () =>
-            {
-                PageData<EntityBase> pageData = NoSQLHelper.LoadByPage<EntityBase>(pageViewModel.PageIndex, pageViewModel.PageSize);
-                pageData.FillPage(pageViewModel);
-                return pageData.QueryData;
-            };
-            pageViewModel.ChangePage();
-            //分页DEMO
-
-
+            ////分页DEMO
+            //var pageViewModel = new PageViewModel<T2>();
+            //pageViewModel.PageSize = 20;
+            //this.pageView.PageViewModel = pageViewModel;
+            //dataGrid.ItemsSource = pageViewModel.ObservableCollectionObject;
+            //pageViewModel.ChangePageFun = () =>
+            //{
+            //    PageData<T2> pageData = NoSQLHelper.LoadByPage<T2>(pageViewModel.PageIndex, pageViewModel.PageSize);
+            //    pageData.FillPage(pageViewModel);
+            //    return pageData.QueryData;
+            //};
+            //pageViewModel.ChangePage();
+            ////分页DEMO
+            ObservableCollection<T2> observableCollection = new ObservableCollection<T2>();
+            observableCollection.Add(new T2() { TTTTT = T1.a });
+            observableCollection.Add(new T2() { TTTTT = T1.b });
+            dataGrid.ItemsSource = observableCollection;
+            //dataGrid.DataContext = observableCollection;
+            grid1.DataContext = observableCollection[0]; 
             "加载完成".WriteToLog(log4net.Core.Level.Info);
         }
 
@@ -97,6 +92,33 @@ namespace WelcomeScreen
         private void btn2_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("btn2");
+        }
+    }
+
+
+    public enum T1
+    {
+        [Display(Name = "Test1")]
+        a,
+        [Display(Name = "Test2")]
+        b,
+        [Display(Name = "Test3")]
+        c,
+    }
+
+    public class T2 : NotifyBaseModel
+    {
+        [Display(Name = "属性TTTTT")]
+        public T1 TTTTT
+        {
+            get
+            {
+                return this.GetValue(o => o.TTTTT);
+            }
+            set
+            {
+                this.SetValue(o => o.TTTTT, value);
+            }
         }
     }
 }
