@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"   
         xmlns:control="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:shared="http://metro.mahapps.com/winfx/xaml/shared"
-        xmlns:Base="http://schemas.strongit.com.cn/Base"     
+        xmlns:Base="http://schemas.strongit.com.cn/Base"
         x:Class="WelcomeScreen.WinTest"
         mc:Ignorable="d" SnapsToDevicePixels="True" UseLayoutRounding="True" 
         Title="欢迎使用XXX系统，测试界面"  WindowStartupLocation="CenterScreen"   Height="600" Width="800" >
