@@ -89,6 +89,7 @@
     <Compile Include="Socket\Udp\MessageUdpExpansion.cs" />
     <Compile Include="Socket\Udp\UdpService.cs" />
     <Compile Include="Tools\ProcessTools.cs" />
+    <Compile Include="Tools\WPFUITools.cs" />
     <Compile Include="URL\STATURL.cs" />
     <Compile Include="URL\UrlData.cs" />
     <Compile Include="WorkPath.cs" />

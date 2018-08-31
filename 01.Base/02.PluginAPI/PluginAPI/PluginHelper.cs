@@ -39,7 +39,9 @@ namespace PluginAPI
             {
                 Directory.CreateDirectory(WorkPath.ExecPath);
             }
-            var files = Directory.GetFiles(WorkPath.ExecPath, "*", SearchOption.AllDirectories).Where(file => !file.Contains("LibVlc") && file.ToLower().EndsWith(".dll".ToLower())).ToList();
+            var files = Directory.GetFiles(WorkPath.ExecPath, "*", SearchOption.AllDirectories)
+                .Where(file => !file.Contains("LibVlc") //排除第三方库不可识别的库
+                                 && file.ToLower().EndsWith(".dll".ToLower())).ToList();
             //var models = AppDomain.CurrentDomain.GetAssemblies();
             if (ApplicationAssembly == null)
             {

@@ -65,7 +65,7 @@ namespace MVVM.Controls
         public ICommand ChangePage
         {
             get
-            {
+            { 
                 return new DelegateCommand<Button>(button =>
                 {
                     if (this.PageViewModel == null)

@@ -23,20 +23,30 @@ namespace MVVM.Model
         /// </summary>
         public NotifyBaseModel()
         {
-            this.Error = new ValidationErrorData();
-            this.Error.NotifyProperty = this;
+            this.Error = new ValidationErrorData
+            {
+                NotifyProperty = this
+            };
 
-            this.DisplayName = new DisplayNameData();
-            this.DisplayName.NotifyProperty = this;
+            this.DisplayName = new DisplayNameData
+            {
+                NotifyProperty = this
+            };
 
-            this.ShortName = new ShortNameData();
-            this.ShortName.NotifyProperty = this;
+            this.ShortName = new ShortNameData
+            {
+                NotifyProperty = this
+            };
 
-            this.Prompt = new PromptData();
-            this.Prompt.NotifyProperty = this;
+            this.Prompt = new PromptData
+            {
+                NotifyProperty = this
+            };
 
-            this.Description = new DescriptionData();
-            this.Description.NotifyProperty = this;
+            this.Description = new DescriptionData
+            {
+                NotifyProperty = this
+            };
         }
 
         /// <summary>

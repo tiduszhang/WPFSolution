@@ -6,6 +6,7 @@ using System.Windows.Media;
 using System;
 using System.Linq;
 using MVVM.ViewModel;
+using Common;
 
 namespace MVVM.View
 {
@@ -35,7 +36,7 @@ namespace MVVM.View
             {
                 if (this.AssociatedObject != null)
                 {
-                    window = UIElementHelper.GetOwnerWindow<Window>(this.AssociatedObject);
+                    window = WPFUITools.GetOwnerWindow<Window>(this.AssociatedObject);
                     if (window != null)
                     {
                         window.SizeChanged += window_SizeChanged;
