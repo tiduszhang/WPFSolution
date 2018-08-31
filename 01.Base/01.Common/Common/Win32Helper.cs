@@ -51,10 +51,10 @@ namespace Common
         /// 动态链接库-指针对象
         /// </summary>
         private IntPtr hLib;
-        /// <summary>
-        /// 是否回收完毕
-        /// </summary>
-        private bool _disposed;
+        ///// <summary>
+        ///// 是否回收完毕
+        ///// </summary>
+        //private bool _disposed;
         /// <summary>
         /// 构造函数
         /// </summary>
