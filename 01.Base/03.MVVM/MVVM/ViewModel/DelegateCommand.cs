@@ -16,7 +16,7 @@ namespace MVVM.ViewModel
         /// <param name="executeMethod">The <see cref="T:System.Action" /> to invoke when <see cref="M:System.Windows.Input.ICommand.Execute(System.Object)" /> is called.</param>
         public DelegateCommand(Action executeMethod)
             : this(executeMethod, () => true)
-        {
+        { 
         }
 
         /// <summary>
