@@ -1,0 +1,2283 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MVVM</name>
+    </assembly>
+    <members>
+        <member name="T:MVVM.Messaging.IExecuteWithObject">
+            <summary>
+            This interface is meant for the <see cref="T:MVVM.Messaging.WeakAction`1" /> class and can be 
+            useful if you store multiple WeakAction{T} instances but don't know in advance
+            what type T represents.
+            </summary>
+        </member>
+        <member name="M:MVVM.Messaging.IExecuteWithObject.ExecuteWithObject(System.Object)">
+            <summary>
+            Executes an action.
+            </summary>
+            <param name="parameter">A parameter passed as an object,
+            to be casted to the appropriate type.</param>
+        </member>
+        <member name="T:MVVM.Messaging.IMessenger">
+            <summary>
+            The Messenger is a class allowing objects to exchange messages.
+            </summary>
+        </member>
+        <member name="M:MVVM.Messaging.IMessenger.Register``1(System.Object,System.Action{``0})">
+            <summary>
+            Registers a recipient for a type of message TMessage. The action
+            parameter will be executed when a corresponding message is sent.
+            <para>Registering a recipient does not create a hard reference to it,
+            so if this recipient is deleted, no memory leak is caused.</para>
+            </summary>
+            <typeparam name="TMessage">The type of message that the recipient registers
+            for.</typeparam>
+            <param name="recipient">The recipient that will receive the messages.</param>
+            <param name="action">The action that will be executed when a message
+            of type TMessage is sent.</param>
+        </member>
+        <member name="M:MVVM.Messaging.IMessenger.Register``1(System.Object,System.Boolean,System.Action{``0})">
+            <summary>
+            Registers a recipient for a type of message TMessage.
+            The action parameter will be executed when a corresponding 
+            message is sent. See the receiveDerivedMessagesToo parameter
+            for details on how messages deriving from TMessage (or, if TMessage is an interface,
+            messages implementing TMessage) can be received too.
+            <para>Registering a recipient does not create a hard reference to it,
+            so if this recipient is deleted, no memory leak is caused.</para>
+            </summary>
+            <typeparam name="TMessage">The type of message that the recipient registers
+            for.</typeparam>
+            <param name="recipient">The recipient that will receive the messages.</param>
+            <param name="receiveDerivedMessagesToo">If true, message types deriving from
+            TMessage will also be transmitted to the recipient. For example, if a SendOrderMessage
+            and an ExecuteOrderMessage derive from OrderMessage, registering for OrderMessage
+            and setting receiveDerivedMessagesToo to true will send SendOrderMessage
+            and ExecuteOrderMessage to the recipient that registered.
+            <para>Also, if TMessage is an interface, message types implementing TMessage will also be
+            transmitted to the recipient. For example, if a SendOrderMessage
+            and an ExecuteOrderMessage implement IOrderMessage, registering for IOrderMessage
+            and setting receiveDerivedMessagesToo to true will send SendOrderMessage
+            and ExecuteOrderMessage to the recipient that registered.</para>
+            </param>
+            <param name="action">The action that will be executed when a message
+            of type TMessage is sent.</param>
+        </member>
+        <member name="M:MVVM.Messaging.IMessenger.Send``1(``0)">
+            <summary>
+            Sends a message to registered recipients. The message will
+            reach all recipients that registered for this message type
+            using one of the Register methods.
+            </summary>
+            <typeparam name="TMessage">The type of message that will be sent.</typeparam>
+            <param name="message">The message to send to registered recipients.</param>
+        </member>
+        <member name="M:MVVM.Messaging.IMessenger.Send``2(``0)">
+            <summary>
+            Sends a message to registered recipients. The message will
+            reach only recipients that registered for this message type
+            using one of the Register methods, and that are
+            of the targetType.
+            </summary>
+            <typeparam name="TMessage">The type of message that will be sent.</typeparam>
+            <typeparam name="TTarget">The type of recipients that will receive
+            the message. The message won't be sent to recipients of another type.</typeparam>
+            <param name="message">The message to send to registered recipients.</param>
+        </member>
+        <member name="M:MVVM.Messaging.IMessenger.Unregister(System.Object)">
+            <summary>
+            Unregisters a messager recipient completely. After this method
+            is executed, the recipient will not receive any messages anymore.
+            </summary>
+            <param name="recipient">The recipient that must be unregistered.</param>
+        </member>
+        <member name="M:MVVM.Messaging.IMessenger.Unregister``1(System.Object)">
+            <summary>
+            Unregisters a message recipient for a given type of messages only. 
+            After this method is executed, the recipient will not receive messages
+            of type TMessage anymore, but will still receive other message types (if it
+            registered for them previously).
+            </summary>
+            <typeparam name="TMessage">The type of messages that the recipient wants
+            to unregister from.</typeparam>
+            <param name="recipient">The recipient that must be unregistered.</param>
+        </member>
+        <member name="M:MVVM.Messaging.IMessenger.Unregister``1(System.Object,System.Action{``0})">
+            <summary>
+            Unregisters a message recipient for a given type of messages and for
+            a given action. Other message types will still be transmitted to the
+            recipient (if it registered for them previously). Other actions that have
+            been registered for the message type TMessage and for the given recipient (if
+            available) will also remain available.
+            </summary>
+            <typeparam name="TMessage">The type of messages that the recipient wants
+            to unregister from.</typeparam>
+            <param name="recipient">The recipient that must be unregistered.</param>
+            <param name="action">The action that must be unregistered for
+            the recipient and for the message type TMessage.</param>
+        </member>
+        <member name="T:MVVM.Messaging.Messenger">
+            <summary>
+            The Messenger is a class allowing objects to exchange messages.
+            </summary>
+        </member>
+        <member name="P:MVVM.Messaging.Messenger.Default">
+            <summary>
+            Gets the Messenger's default instance, allowing
+            to register and send messages in a static manner.
+            </summary>
+        </member>
+        <member name="M:MVVM.Messaging.Messenger.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:MVVM.Messaging.Messenger.OverrideDefault(MVVM.Messaging.Messenger)">
+            <summary>
+            Provides a way to override the Messenger.Default instance with
+            a custom instance, for example for unit testing purposes.
+            </summary>
+            <param name="newMessenger">The instance that will be used as Messenger.Default.</param>
+        </member>
+        <member name="M:MVVM.Messaging.Messenger.Register``1(System.Object,System.Action{``0})">
+            <summary>
+            Registers a recipient for a type of message TMessage. The action
+            parameter will be executed when a corresponding message is sent.
+            <para>Registering a recipient does not create a hard reference to it,
+            so if this recipient is deleted, no memory leak is caused.</para>
+            </summary>
+            <typeparam name="TMessage">The type of message that the recipient registers
+            for.</typeparam>
+            <param name="recipient">The recipient that will receive the messages.</param>
+            <param name="action">The action that will be executed when a message
+            of type TMessage is sent.</param>
+        </member>
+        <member name="M:MVVM.Messaging.Messenger.Register``1(System.Object,System.Boolean,System.Action{``0})">
+            <summary>
+            Registers a recipient for a type of message TMessage.
+            The action parameter will be executed when a corresponding 
+            message is sent. See the receiveDerivedMessagesToo parameter
+            for details on how messages deriving from TMessage (or, if TMessage is an interface,
+            messages implementing TMessage) can be received too.
+            <para>Registering a recipient does not create a hard reference to it,
+            so if this recipient is deleted, no memory leak is caused.</para>
+            </summary>
+            <typeparam name="TMessage">The type of message that the recipient registers
+            for.</typeparam>
+            <param name="recipient">The recipient that will receive the messages.</param>
+            <param name="receiveDerivedMessagesToo">If true, message types deriving from
+            TMessage will also be transmitted to the recipient. For example, if a SendOrderMessage
+            and an ExecuteOrderMessage derive from OrderMessage, registering for OrderMessage
+            and setting receiveDerivedMessagesToo to true will send SendOrderMessage
+            and ExecuteOrderMessage to the recipient that registered.
+            <para>Also, if TMessage is an interface, message types implementing TMessage will also be
+            transmitted to the recipient. For example, if a SendOrderMessage
+            and an ExecuteOrderMessage implement IOrderMessage, registering for IOrderMessage
+            and setting receiveDerivedMessagesToo to true will send SendOrderMessage
+            and ExecuteOrderMessage to the recipient that registered.</para>
+            </param>
+            <param name="action">The action that will be executed when a message
+            of type TMessage is sent.</param>
+        </member>
+        <member name="M:MVVM.Messaging.Messenger.Register``1(System.Object,System.Object,System.Action{``0})">
+            <summary>
+            Registers a recipient for a type of message TMessage.
+            The action parameter will be executed when a corresponding 
+            message is sent.
+            <para>Registering a recipient does not create a hard reference to it,
+            so if this recipient is deleted, no memory leak is caused.</para>
+            </summary>
+            <typeparam name="TMessage">The type of message that the recipient registers
+            for.</typeparam>
+            <param name="recipient">The recipient that will receive the messages.</param>
+            <param name="token">A token for a messaging channel. If a recipient registers
+            using a token, and a sender sends a message using the same token, then this
+            message will be delivered to the recipient. Other recipients who did not
+            use a token when registering (or who used a different token) will not
+            get the message. Similarly, messages sent without any token, or with a different
+            token, will not be delivered to that recipient.</param>
+            <param name="action">The action that will be executed when a message
+            of type TMessage is sent.</param>
+        </member>
+        <member name="M:MVVM.Messaging.Messenger.Register``1(System.Object,System.Object,System.Boolean,System.Action{``0})">
+            <summary>
+            Registers a recipient for a type of message TMessage.
+            The action parameter will be executed when a corresponding 
+            message is sent. See the receiveDerivedMessagesToo parameter
+            for details on how messages deriving from TMessage (or, if TMessage is an interface,
+            messages implementing TMessage) can be received too.
+            <para>Registering a recipient does not create a hard reference to it,
+            so if this recipient is deleted, no memory leak is caused.</para>
+            </summary>
+            <typeparam name="TMessage">The type of message that the recipient registers
+            for.</typeparam>
+            <param name="recipient">The recipient that will receive the messages.</param>
+            <param name="token">A token for a messaging channel. If a recipient registers
+            using a token, and a sender sends a message using the same token, then this
+            message will be delivered to the recipient. Other recipients who did not
+            use a token when registering (or who used a different token) will not
+            get the message. Similarly, messages sent without any token, or with a different
+            token, will not be delivered to that recipient.</param>
+            <param name="receiveDerivedMessagesToo">If true, message types deriving from
+            TMessage will also be transmitted to the recipient. For example, if a SendOrderMessage
+            and an ExecuteOrderMessage derive from OrderMessage, registering for OrderMessage
+            and setting receiveDerivedMessagesToo to true will send SendOrderMessage
+            and ExecuteOrderMessage to the recipient that registered.
+            <para>Also, if TMessage is an interface, message types implementing TMessage will also be
+            transmitted to the recipient. For example, if a SendOrderMessage
+            and an ExecuteOrderMessage implement IOrderMessage, registering for IOrderMessage
+            and setting receiveDerivedMessagesToo to true will send SendOrderMessage
+            and ExecuteOrderMessage to the recipient that registered.</para>
+            </param>
+            <param name="action">The action that will be executed when a message
+            of type TMessage is sent.</param>
+        </member>
+        <member name="M:MVVM.Messaging.Messenger.Reset">
+            <summary>
+            Sets the Messenger's default (static) instance to null.
+            </summary>
+        </member>
+        <member name="M:MVVM.Messaging.Messenger.Send``1(``0)">
+            <summary>
+            Sends a message to registered recipients. The message will
+            reach all recipients that registered for this message type
+            using one of the Register methods.
+            </summary>
+            <typeparam name="TMessage">The type of message that will be sent.</typeparam>
+            <param name="message">The message to send to registered recipients.</param>
+        </member>
+        <member name="M:MVVM.Messaging.Messenger.Send``2(``0)">
+            <summary>
+            Sends a message to registered recipients. The message will
+            reach only recipients that registered for this message type
+            using one of the Register methods, and that are
+            of the targetType.
+            </summary>
+            <typeparam name="TMessage">The type of message that will be sent.</typeparam>
+            <typeparam name="TTarget">The type of recipients that will receive
+            the message. The message won't be sent to recipients of another type.</typeparam>
+            <param name="message">The message to send to registered recipients.</param>
+        </member>
+        <member name="M:MVVM.Messaging.Messenger.Send``1(``0,System.Object)">
+            <summary>
+            Sends a message to registered recipients. The message will
+            reach only recipients that registered for this message type
+            using one of the Register methods, and that are
+            of the targetType.
+            </summary>
+            <typeparam name="TMessage">The type of message that will be sent.</typeparam>
+            <param name="message">The message to send to registered recipients.</param>
+            <param name="token">A token for a messaging channel. If a recipient registers
+            using a token, and a sender sends a message using the same token, then this
+            message will be delivered to the recipient. Other recipients who did not
+            use a token when registering (or who used a different token) will not
+            get the message. Similarly, messages sent without any token, or with a different
+            token, will not be delivered to that recipient.</param>
+        </member>
+        <member name="M:MVVM.Messaging.Messenger.Unregister(System.Object)">
+            <summary>
+            Unregisters a messager recipient completely. After this method
+            is executed, the recipient will not receive any messages anymore.
+            </summary>
+            <param name="recipient">The recipient that must be unregistered.</param>
+        </member>
+        <member name="M:MVVM.Messaging.Messenger.Unregister``1(System.Object)">
+            <summary>
+            Unregisters a message recipient for a given type of messages only. 
+            After this method is executed, the recipient will not receive messages
+            of type TMessage anymore, but will still receive other message types (if it
+            registered for them previously).
+            </summary>
+            <param name="recipient">The recipient that must be unregistered.</param>
+            <typeparam name="TMessage">The type of messages that the recipient wants
+            to unregister from.</typeparam>
+        </member>
+        <member name="M:MVVM.Messaging.Messenger.Unregister``1(System.Object,System.Object)">
+            <summary>
+            Unregisters a message recipient for a given type of messages only and for a given token. 
+            After this method is executed, the recipient will not receive messages
+            of type TMessage anymore with the given token, but will still receive other message types
+            or messages with other tokens (if it registered for them previously).
+            </summary>
+            <param name="recipient">The recipient that must be unregistered.</param>
+            <param name="token">The token for which the recipient must be unregistered.</param>
+            <typeparam name="TMessage">The type of messages that the recipient wants
+            to unregister from.</typeparam>
+        </member>
+        <member name="M:MVVM.Messaging.Messenger.Unregister``1(System.Object,System.Action{``0})">
+            <summary>
+            Unregisters a message recipient for a given type of messages and for
+            a given action. Other message types will still be transmitted to the
+            recipient (if it registered for them previously). Other actions that have
+            been registered for the message type TMessage and for the given recipient (if
+            available) will also remain available.
+            </summary>
+            <typeparam name="TMessage">The type of messages that the recipient wants
+            to unregister from.</typeparam>
+            <param name="recipient">The recipient that must be unregistered.</param>
+            <param name="action">The action that must be unregistered for
+            the recipient and for the message type TMessage.</param>
+        </member>
+        <member name="M:MVVM.Messaging.Messenger.Unregister``1(System.Object,System.Object,System.Action{``0})">
+            <summary>
+            Unregisters a message recipient for a given type of messages, for
+            a given action and a given token. Other message types will still be transmitted to the
+            recipient (if it registered for them previously). Other actions that have
+            been registered for the message type TMessage, for the given recipient and other tokens (if
+            available) will also remain available.
+            </summary>
+            <typeparam name="TMessage">The type of messages that the recipient wants
+            to unregister from.</typeparam>
+            <param name="recipient">The recipient that must be unregistered.</param>
+            <param name="token">The token for which the recipient must be unregistered.</param>
+            <param name="action">The action that must be unregistered for
+            the recipient and for the message type TMessage.</param>
+        </member>
+        <member name="T:MVVM.Messaging.NotificationMessage">
+            <summary>
+            互通消息对象
+            </summary>
+        </member>
+        <member name="P:MVVM.Messaging.NotificationMessage.Key">
+            <summary>
+            消息关键字
+            </summary>
+        </member>
+        <member name="P:MVVM.Messaging.NotificationMessage.Data">
+            <summary>
+            消息数据内容
+            </summary>
+        </member>
+        <member name="T:MVVM.Messaging.WeakAction">
+            <summary>
+            Stores an <see cref="P:MVVM.Messaging.WeakAction.Action" /> without causing a hard reference
+            to be created to the Action's owner. The owner can be garbage collected at any time.
+            </summary>
+        </member>
+        <member name="P:MVVM.Messaging.WeakAction.Action">
+            <summary>
+            Gets the Action associated to this instance.
+            </summary>
+        </member>
+        <member name="P:MVVM.Messaging.WeakAction.IsAlive">
+            <summary>
+            Gets a value indicating whether the Action's owner is still alive, or if it was collected
+            by the Garbage Collector already.
+            </summary>
+        </member>
+        <member name="P:MVVM.Messaging.WeakAction.Target">
+            <summary>
+            Gets the Action's owner. This object is stored as a <see cref="T:System.WeakReference" />.
+            </summary>
+        </member>
+        <member name="M:MVVM.Messaging.WeakAction.#ctor(System.Object,System.Action)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MVVM.Messaging.WeakAction" /> class.
+            </summary>
+            <param name="target">The action's owner.</param>
+            <param name="action">The action that will be associated to this instance.</param>
+        </member>
+        <member name="M:MVVM.Messaging.WeakAction.Execute">
+            <summary>
+            Executes the action. This only happens if the action's owner
+            is still alive.
+            </summary>
+        </member>
+        <member name="M:MVVM.Messaging.WeakAction.MarkForDeletion">
+            <summary>
+            Sets the reference that this instance stores to null.
+            </summary>
+        </member>
+        <member name="T:MVVM.Messaging.WeakAction`1">
+            <summary>
+            Stores an Action without causing a hard reference
+            to be created to the Action's owner. The owner can be garbage collected at any time.
+            </summary>
+            <typeparam name="T">The type of the Action's parameter.</typeparam>
+        </member>
+        <member name="P:MVVM.Messaging.WeakAction`1.Action">
+            <summary>
+            Gets the Action associated to this instance.
+            </summary>
+        </member>
+        <member name="M:MVVM.Messaging.WeakAction`1.#ctor(System.Object,System.Action{`0})">
+            <summary>
+            Initializes a new instance of the WeakAction class.
+            </summary>
+            <param name="target">The action's owner.</param>
+            <param name="action">The action that will be associated to this instance.</param>
+        </member>
+        <member name="M:MVVM.Messaging.WeakAction`1.Execute">
+            <summary>
+            Executes the action. This only happens if the action's owner
+            is still alive. The action's parameter is set to default(T).
+            </summary>
+        </member>
+        <member name="M:MVVM.Messaging.WeakAction`1.Execute(`0)">
+            <summary>
+            Executes the action. This only happens if the action's owner
+            is still alive.
+            </summary>
+            <param name="parameter">A parameter to be passed to the action.</param>
+        </member>
+        <member name="M:MVVM.Messaging.WeakAction`1.ExecuteWithObject(System.Object)">
+            <summary>
+            Executes the action with a parameter of type object. This parameter
+            will be casted to T. This method implements <see cref="M:MVVM.Messaging.IExecuteWithObject.ExecuteWithObject(System.Object)" />
+            and can be useful if you store multiple WeakAction{T} instances but don't know in advance
+            what type T represents.
+            </summary>
+            <param name="parameter">The parameter that will be passed to the action after
+            being casted to T.</param>
+        </member>
+        <member name="T:MVVM.Model.DescriptionData">
+            <summary>
+            属性描述信息
+            </summary>
+        </member>
+        <member name="P:MVVM.Model.DescriptionData.NotifyProperty">
+            <summary>
+            需要验证的类
+            </summary>
+        </member>
+        <member name="M:MVVM.Model.DescriptionData.#ctor">
+            <summary>
+            构造函数
+            </summary>
+        </member>
+        <member name="P:MVVM.Model.DescriptionData.Item(System.String)">
+            <summary>
+            索引
+            </summary>
+            <param name="propertyName"> </param>
+            <returns> </returns>>
+        </member>
+        <member name="M:MVVM.Model.DescriptionData.Dispose">
+            <summary>
+            释放资源
+            </summary>
+        </member>
+        <member name="T:MVVM.Model.DescriptionDataExtension">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:MVVM.Model.DescriptionDataExtension.GetPropertyDescription``1(``0,System.String)">
+            <summary>
+            
+            </summary>
+            <typeparam name="T"> </typeparam>
+            <param name="obj"> </param>
+            <param name="propertyName"> </param>
+            <returns> </returns>
+        </member>
+        <member name="T:MVVM.Model.PromptData">
+            <summary>
+            属性水印
+            </summary>
+        </member>
+        <member name="P:MVVM.Model.PromptData.NotifyProperty">
+            <summary>
+            需要验证的类
+            </summary>
+        </member>
+        <member name="M:MVVM.Model.PromptData.#ctor">
+            <summary>
+            构造函数
+            </summary>
+        </member>
+        <member name="P:MVVM.Model.PromptData.Item(System.String)">
+            <summary>
+            索引
+            </summary>
+            <param name="propertyName"> </param>
+            <returns> </returns>>
+        </member>
+        <member name="M:MVVM.Model.PromptData.Dispose">
+            <summary>
+            释放资源
+            </summary>
+        </member>
+        <member name="T:MVVM.Model.ShortNameData">
+            <summary>
+            属性短名称
+            </summary>
+        </member>
+        <member name="P:MVVM.Model.ShortNameData.NotifyProperty">
+            <summary>
+            需要验证的类
+            </summary>
+        </member>
+        <member name="M:MVVM.Model.ShortNameData.#ctor">
+            <summary>
+            构造函数
+            </summary>
+        </member>
+        <member name="P:MVVM.Model.ShortNameData.Item(System.String)">
+            <summary>
+            索引
+            </summary>
+            <param name="propertyName"> </param>
+            <returns> </returns>>
+        </member>
+        <member name="M:MVVM.Model.ShortNameData.Dispose">
+            <summary>
+            释放资源
+            </summary>
+        </member>
+        <member name="T:MVVM.Model.PromptDataExtension">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:MVVM.Model.PromptDataExtension.GetPropertyPromptData``1(``0,System.String)">
+            <summary>
+            
+            </summary>
+            <typeparam name="T"> </typeparam>
+            <param name="obj"> </param>
+            <param name="propertyName"> </param>
+            <returns> </returns>
+        </member>
+        <member name="T:MVVM.Model.ShortNameDataExtension">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:MVVM.Model.ShortNameDataExtension.GetPropertyShortName``1(``0,System.String)">
+            <summary>
+            
+            </summary>
+            <typeparam name="T"> </typeparam>
+            <param name="obj"> </param>
+            <param name="propertyName"> </param>
+            <returns> </returns>
+        </member>
+        <member name="T:MVVM.Model.NotifyBaseModelValidationRule">
+            <summary>
+            验证模块-用于界面绑定验证实现
+            </summary>
+        </member>
+        <member name="M:MVVM.Model.NotifyBaseModelValidationRule.Validate(System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            验证方法
+            </summary>
+            <param name="value"></param>
+            <param name="cultureInfo"></param>
+            <returns></returns>
+        </member>
+        <member name="T:MVVM.Model.DisplayNameData">
+            <summary>
+            属性名称
+            </summary>
+        </member>
+        <member name="P:MVVM.Model.DisplayNameData.NotifyProperty">
+            <summary>
+            需要验证的类
+            </summary>
+        </member>
+        <member name="M:MVVM.Model.DisplayNameData.#ctor">
+            <summary>
+            构造函数
+            </summary>
+        </member>
+        <member name="P:MVVM.Model.DisplayNameData.Item(System.String)">
+            <summary>
+            索引
+            </summary>
+            <param name="propertyName"> </param>
+            <returns> </returns>>
+        </member>
+        <member name="M:MVVM.Model.DisplayNameData.Dispose">
+            <summary>
+            释放资源
+            </summary>
+        </member>
+        <member name="T:MVVM.Model.ValidationErrorData">
+            <summary>
+            验证信息数据
+            </summary>
+        </member>
+        <member name="P:MVVM.Model.ValidationErrorData.NotifyProperty">
+            <summary>
+            需要验证的类
+            </summary>
+        </member>
+        <member name="M:MVVM.Model.ValidationErrorData.#ctor">
+            <summary>
+            构造函数
+            </summary>
+        </member>
+        <member name="F:MVVM.Model.ValidationErrorData._ErrorDictionary">
+            <summary>
+            属性和属性验证值
+            </summary>
+        </member>
+        <member name="P:MVVM.Model.ValidationErrorData.Error">
+            <summary>
+            错误信息
+            </summary>
+        </member>
+        <member name="P:MVVM.Model.ValidationErrorData.Item(System.String)">
+            <summary>
+            索引
+            </summary>
+            <param name="columnName"> </param>
+            <returns> </returns>>
+        </member>
+        <member name="M:MVVM.Model.ValidationErrorData.Valid(System.String)">
+            <summary>
+            验证
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MVVM.Model.ValidationErrorData.Dispose">
+            <summary>
+            释放资源
+            </summary>
+        </member>
+        <member name="T:MVVM.Model.NotifyBaseModel">
+            <summary>
+            实体基类，可以实现属性修改事件通知
+            附加功能：
+            1、定义属性验证
+            2、定义属性名称
+            3、定义属性描述
+            </summary>
+        </member>
+        <member name="M:MVVM.Model.NotifyBaseModel.#ctor">
+            <summary>
+            构造函数
+            </summary>
+        </member>
+        <member name="P:MVVM.Model.NotifyBaseModel.Error">
+            <summary>
+            错误信息，通过IDataErrorInfo实现
+            </summary>
+        </member>
+        <member name="P:MVVM.Model.NotifyBaseModel.DisplayName">
+            <summary>
+            属性名称，可以通过DisplayAttribute标注属性名称
+            </summary>
+        </member>
+        <member name="P:MVVM.Model.NotifyBaseModel.ShortName">
+            <summary>
+            属性短名称，可以通过DisplayAttribute标注属性名称
+            </summary>
+        </member>
+        <member name="P:MVVM.Model.NotifyBaseModel.Prompt">
+            <summary>
+            属性水印提示，可以通过DisplayAttribute标注属性名称
+            </summary>
+        </member>
+        <member name="P:MVVM.Model.NotifyBaseModel.Description">
+            <summary>
+            属性描述，可以通过DisplayAttribute标注属性描述
+            </summary>
+        </member>
+        <member name="P:MVVM.Model.NotifyBaseModel.ErrorMessage">
+            <summary>
+            消息内容，所有错误消息内容。
+            </summary>
+        </member>
+        <member name="P:MVVM.Model.NotifyBaseModel.IsValid">
+            <summary>
+            是否验证通过
+            </summary>
+        </member>
+        <member name="M:MVVM.Model.NotifyBaseModel.Valid">
+            <summary>
+            验证属性
+            </summary>
+            <returns> 验证是否通过，若通过则返回 true，否则为false。 </returns>
+        </member>
+        <member name="M:MVVM.Model.NotifyBaseModel.Valid(System.Func{System.Object,System.String})">
+            <summary>
+            验证属性
+            </summary>
+            <param name="Valided"> 先执行属性特性验证。再执行相关验证方法。 </param>
+            <returns> 验证是否通过，若通过则返回 true，否则为false。 </returns>
+        </member>
+        <member name="M:MVVM.Model.NotifyBaseModel.Valid``1(System.Func{``0,System.String})">
+            <summary>
+            验证属性
+            </summary>
+            <typeparam name="T"> 当前对象泛型 </typeparam>
+            <param name="Valided"> 先执行属性特性验证。再执行相关验证方法。 </param>
+            <returns> 验证是否通过，若通过则返回 true，否则为false。 </returns>
+        </member>
+        <member name="M:MVVM.Model.NotifyBaseModel.Dispose">
+            <summary>
+            释放资源
+            </summary>
+        </member>
+        <member name="T:MVVM.Model.NotifyPropertyBaseExtension">
+            <summary>
+            扩展
+            </summary>
+        </member>
+        <member name="M:MVVM.Model.NotifyPropertyBaseExtension.GetValue``2(``0,System.Linq.Expressions.Expression{System.Func{``0,``1}})">
+            <summary>
+            属性访问
+            </summary>
+            <typeparam name="T"> </typeparam>
+            <typeparam name="U"> </typeparam>
+            <param name="t"> </param>
+            <param name="exp"> </param>
+            <returns> </returns>
+        </member>
+        <member name="M:MVVM.Model.NotifyPropertyBaseExtension.SetValue``2(``0,System.Linq.Expressions.Expression{System.Func{``0,``1}},``1)">
+            <summary>
+            属性访问
+            </summary>
+            <typeparam name="T"> </typeparam>
+            <typeparam name="U"> </typeparam>
+            <param name="t"> </param>
+            <param name="exp"> </param>
+            <param name="value"> </param>
+        </member>
+        <member name="M:MVVM.Model.NotifyPropertyBaseExtension.GetPropertyName``2(System.Linq.Expressions.Expression{System.Func{``0,``1}})">
+            <summary>
+            得到属性名称
+            </summary>
+            <typeparam name="T"> </typeparam>
+            <typeparam name="U"> </typeparam>
+            <param name="exp"> </param>
+            <returns> </returns>
+        </member>
+        <member name="T:MVVM.Model.NotifyPropertyBase">
+            <summary>
+            基类
+            </summary>
+        </member>
+        <member name="F:MVVM.Model.NotifyPropertyBase._ValueDictionary">
+            <summary>
+            属性和属性值
+            </summary>
+        </member>
+        <member name="M:MVVM.Model.NotifyPropertyBase.GetPropertyValue``1(System.String)">
+            <summary>
+            属性访问
+            </summary>
+            <typeparam name="T"> </typeparam>
+            <param name="propertyName"> </param>
+            <returns> </returns>
+        </member>
+        <member name="M:MVVM.Model.NotifyPropertyBase.SetPropertyValue``1(System.String,``0)">
+            <summary>
+            属性访问
+            </summary>
+            <typeparam name="T"> </typeparam>
+            <param name="propertyName"> </param>
+            <param name="value"> </param>
+        </member>
+        <member name="M:MVVM.Model.NotifyPropertyBase.#ctor">
+            <summary>
+            构造函数
+            </summary>
+        </member>
+        <member name="M:MVVM.Model.NotifyPropertyBase.OnPropertyChanged(System.String)">
+            <summary>
+            属性修改
+            </summary>
+            <param name="propertyName"> </param>
+        </member>
+        <member name="M:MVVM.Model.NotifyPropertyBase.Dispose">
+            <summary>
+            释放资源
+            </summary>
+        </member>
+        <member name="E:MVVM.Model.NotifyPropertyBase.PropertyChanged">
+            <summary>
+            属性修改
+            </summary>
+        </member>
+        <member name="T:MVVM.Model.ObservableCollectionExtension">
+            <summary>
+            用于实现模型层绑定数据基类-集合数据
+            </summary>
+        </member>
+        <member name="M:MVVM.Model.ObservableCollectionExtension.Exists``1(System.Collections.ObjectModel.ObservableCollection{``0},System.Predicate{``0})">
+            <summary>
+            检查是否存在
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="collection"></param>
+            <param name="predicate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MVVM.Model.ObservableCollectionExtension.ForEach``1(System.Collections.ObjectModel.ObservableCollection{``0},System.Action{``0})">
+            <summary>
+            遍历数据集合
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="collection"></param>
+            <param name="action"></param>
+        </member>
+        <member name="M:MVVM.Model.ObservableCollectionExtension.Find``1(System.Collections.ObjectModel.ObservableCollection{``0},System.Predicate{``0})">
+            <summary>
+            查找第一个符合条件的数据
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="collection"></param>
+            <param name="predicate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MVVM.Model.ObservableCollectionExtension.FindAll``1(System.Collections.ObjectModel.ObservableCollection{``0},System.Predicate{``0})">
+            <summary>
+            查找所有符合条件的数据
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="collection"></param>
+            <param name="predicate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MVVM.Model.ObservableCollectionExtension.CopyToList``1(System.Collections.ObjectModel.ObservableCollection{``0},System.Collections.Generic.IList{``0})">
+             <summary>
+            复制绑定对象到列表对象
+             </summary>
+             <typeparam name="T"></typeparam>
+             <param name="collection"></param>
+             <param name="lstresult"></param>
+             <returns></returns>
+        </member>
+        <member name="M:MVVM.Model.ObservableCollectionExtension.ToJson``1(System.Collections.ObjectModel.ObservableCollection{``0})">
+            <summary>
+            将界面对象列表转换成JSON字符串
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="collection"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MVVM.Model.ObservableCollectionExtension.CopyToObservableCollection``1(System.String,System.Collections.ObjectModel.ObservableCollection{``0})">
+            <summary>
+            将字符串转换成界面对象列表
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="value"></param>
+            <param name="collection"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MVVM.Model.ObservableCollectionExtension.CopyToObservableCollection``1(System.Collections.Generic.IList{``0},System.Collections.ObjectModel.ObservableCollection{``0})">
+            <summary>
+            复制列表到绑定列表
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="value"></param>
+            <param name="collection"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MVVM.Model.ObservableCollectionExtension.IsValid``1(System.Collections.ObjectModel.ObservableCollection{``0})">
+            <summary>
+            验证序列
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="T:MVVM.Model.DisplayNameDataExtension">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:MVVM.Model.DisplayNameDataExtension.GetPropertyDisplayName``1(``0,System.String)">
+            <summary>
+            
+            </summary>
+            <typeparam name="T"> </typeparam>
+            <param name="obj"> </param>
+            <param name="propertyName"> </param>
+            <returns> </returns>
+        </member>
+        <member name="T:MVVM.Model.NullValidationAttribute">
+            <summary>
+            验证空数据特性
+            </summary>
+        </member>
+        <member name="M:MVVM.Model.NullValidationAttribute.IsValid(System.Object)">
+            <summary>
+            验证方法
+            </summary>
+            <param name="value"> </param>
+            <returns> </returns>
+        </member>
+        <member name="M:MVVM.Model.NullValidationAttribute.FormatErrorMessage(System.String)">
+            <summary>
+            错误信息
+            </summary>
+            <param name="name"> </param>
+            <returns> </returns>
+        </member>
+        <member name="P:MVVM.Model.NullValidationAttribute.NotTrim">
+            <summary>
+            是否需要去除头尾空格
+            </summary>
+        </member>
+        <member name="T:MVVM.Model.ValidationErrorDataExtension">
+            <summary>
+            数据验证扩展
+            </summary>
+        </member>
+        <member name="M:MVVM.Model.ValidationErrorDataExtension.ValidateProperty``1(``0,System.String)">
+            <summary>
+            验证方法
+            </summary>
+            <typeparam name="T"> </typeparam>
+            <param name="obj"> </param>
+            <param name="propertyName"> </param>
+            <returns> </returns>
+        </member>
+        <member name="T:MVVM.Properties.Resources">
+            <summary>
+              一个强类型的资源类，用于查找本地化的字符串等。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.ResourceManager">
+            <summary>
+              返回此类使用的缓存的 ResourceManager 实例。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.Culture">
+            <summary>
+              重写当前线程的 CurrentUICulture 属性
+              重写当前线程的 CurrentUICulture 属性。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.AdapterInvalidTypeException">
+            <summary>
+              查找类似 The object must be of type &apos;{0}&apos; in order to use the current region adapter. 的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.CannotChangeRegionNameException">
+            <summary>
+              查找类似 Cannot change the region name once is set. The current region name is &apos;{0}&apos;. 的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.CannotCreateNavigationTarget">
+            <summary>
+              查找类似 Cannot create navigation target &apos;{0}&apos;. 的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.CannotRegisterCompositeCommandInItself">
+            <summary>
+              查找类似 Cannot register a CompositeCommand in itself. 的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.CannotRegisterSameCommandTwice">
+            <summary>
+              查找类似 Cannot register the same command twice in the same CompositeCommand. 的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.CanOnlyAddTypesThatInheritIFromRegionBehavior">
+            <summary>
+              查找类似 Type &apos;{0}&apos; does not implement from IRegionBehavior. 的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.ConfigurationStoreCannotBeNull">
+            <summary>
+              查找类似 The ConfigurationStore cannot contain a null value.  的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.ContentControlHasContentException">
+            <summary>
+              查找类似 ContentControl&apos;s Content property is not empty. 
+               This control is being associated with a region, but the control is already bound to something else. 
+               If you did not explicitly set the control&apos;s Content property, 
+               this exception may be caused by a change in the value of the inherited RegionManager attached property. 的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.CyclicDependencyFound">
+            <summary>
+              查找类似 At least one cyclic dependency has been found in the module catalog. Cycles in the module dependencies must be avoided. 的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.DeactiveNotPossibleException">
+            <summary>
+              查找类似 Deactivation is not possible in this type of region. 的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.DefaultTextLoggerPattern">
+            <summary>
+              查找类似 {1}: {2}. Priority: {3}. Timestamp:{0:u}. 的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.DelegateCommandDelegatesCannotBeNull">
+            <summary>
+              查找类似 Neither the executeMethod nor the canExecuteMethod delegates can be null. 的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.DelegateCommandInvalidGenericPayloadType">
+            <summary>
+              查找类似 T for DelegateCommand&lt;T&gt; is not an object nor Nullable. 的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.DependencyForUnknownModule">
+            <summary>
+              查找类似 Cannot add dependency for unknown module {0} 的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.DependencyOnMissingModule">
+            <summary>
+              查找类似 A module declared a dependency on another module which is not declared to be loaded. Missing module(s): {0} 的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.DirectoryNotFound">
+            <summary>
+              查找类似 Directory {0} was not found. 的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.DuplicatedModule">
+            <summary>
+              查找类似 A duplicated module with name {0} has been found by the loader. 的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.DuplicatedModuleGroup">
+            <summary>
+              查找类似 A duplicated module group with name {0} has been found by the loader. 的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.FailedToGetType">
+            <summary>
+              查找类似 Unable to retrieve the module type {0} from the loaded assemblies.  You may need to specify a more fully-qualified type name. 的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.FailedToLoadModule">
+            <summary>
+              查找类似 An exception occurred while initializing module &apos;{0}&apos;. 
+               - The exception message was: {2}
+               - The Assembly that the module was trying to be loaded from was:{1}
+               Check the InnerException property of the exception for more information. If the exception occurred while creating an object in a DI container, you can exception.GetRootException() to help locate the root cause of the problem. 
+              的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.FailedToLoadModuleNoAssemblyInfo">
+            <summary>
+              查找类似 An exception occurred while initializing module &apos;{0}&apos;. 
+               - The exception message was: {1}
+               Check the InnerException property of the exception for more information. If the exception occurred 
+               while creating an object in a DI container, you can exception.GetRootException() to help locate the 
+               root cause of the problem.  的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.FailedToRetrieveModule">
+             <summary>
+               查找类似 Failed to load type for module {0}. 
+            
+            If this error occurred when using MEF in a Silverlight application, please ensure that the CopyLocal property of the reference to the MefExtensions assembly is set to true in the main application/shell and false in all other assemblies. 
+            
+            Error was: {1}. 的本地化字符串。
+             </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.HostControlCannotBeNull">
+            <summary>
+              查找类似 HostControl cannot have null value when behavior attaches.  的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.HostControlCannotBeSetAfterAttach">
+            <summary>
+              查找类似 The HostControl property cannot be set after Attach method has been called. 的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.HostControlMustBeATabControl">
+            <summary>
+              查找类似 HostControl type must be a TabControl. 的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.IEnumeratorObsolete">
+            <summary>
+              查找类似 The IModuleEnumerator interface is no longer used and has been replaced by ModuleCatalog. 的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.InvalidArgumentAssemblyUri">
+            <summary>
+              查找类似 The argument must be a valid absolute Uri to an assembly file. 的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.InvalidDelegateRerefenceTypeException">
+            <summary>
+              查找类似 The Target of the IDelegateReference should be of type {0}. 的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.ItemsControlHasItemsSourceException">
+            <summary>
+              查找类似 ItemsControl&apos;s ItemsSource property is not empty. 
+               This control is being associated with a region, but the control is already bound to something else. 
+               If you did not explicitly set the control&apos;s ItemSource property, 
+               this exception may be caused by a change in the value of the inherited RegionManager attached property. 的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.MappingExistsException">
+            <summary>
+              查找类似 Mapping with the given type is already registered: {0}. 的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.ModuleDependenciesNotMetInGroup">
+            <summary>
+              查找类似 Module {0} depends on other modules that don&apos;t belong to the same group. 的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.ModuleNotFound">
+            <summary>
+              查找类似 Module {0} was not found in the catalog. 的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.ModulePathCannotBeNullOrEmpty">
+            <summary>
+              查找类似 The ModulePath cannot contain a null value or be empty 的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.ModuleTypeNotFound">
+            <summary>
+              查找类似 Failed to load type &apos;{0}&apos; from assembly &apos;{1}&apos;. 的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.NavigationInProgress">
+            <summary>
+              查找类似 Navigation is already in progress on region with name &apos;{0}&apos;. 的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.NavigationServiceHasNoRegion">
+            <summary>
+              查找类似 Navigation cannot proceed until a region is set for the RegionNavigationService. 的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.NoRegionAdapterException">
+            <summary>
+              查找类似 The IRegionAdapter for the type {0} is not registered in the region adapter mappings. You can register an IRegionAdapter for this control by overriding the ConfigureRegionAdapterMappings method in the bootstrapper. 的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.NoRetrieverCanRetrieveModule">
+            <summary>
+              查找类似 There is currently no moduleTypeLoader in the ModuleManager that can retrieve the specified module. 的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.OnViewRegisteredException">
+            <summary>
+              查找类似 An exception has occurred while trying to add a view to region &apos;{0}&apos;. 
+               - The most likely causing exception was was: &apos;{1}&apos;.
+               But also check the InnerExceptions for more detail or call .GetRootException().  的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.PropertySupport_ExpressionNotProperty_Exception">
+            <summary>
+              查找类似 The member access expression does not access a property. 的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.PropertySupport_NotMemberAccessExpression_Exception">
+            <summary>
+              查找类似 The expression is not a member access expression. 的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.PropertySupport_StaticExpression_Exception">
+            <summary>
+              查找类似 The referenced property is a static property. 的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.RegionBehaviorAttachCannotBeCallWithNullRegion">
+            <summary>
+              查找类似 The Attach method cannot be called when Region property is null. 的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.RegionBehaviorRegionCannotBeSetAfterAttach">
+            <summary>
+              查找类似 The Region property cannot be set after Attach method has been called. 的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.RegionCreationException">
+            <summary>
+              查找类似 An exception occurred while creating a region with name &apos;{0}&apos;. The exception was: {1}.  的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.RegionManagerWithDifferentNameException">
+            <summary>
+              查找类似 The region being added already has a name of &apos;{0}&apos; and cannot be added to the region manager with a different name (&apos;{1}&apos;). 的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.RegionNameCannotBeEmptyException">
+            <summary>
+              查找类似 The region name cannot be null or empty. 的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.RegionNameExistsException">
+            <summary>
+              查找类似 Region with the given name is already registered: {0} 的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.RegionNotFound">
+            <summary>
+              查找类似 This RegionManager does not contain a Region with the name &apos;{0}&apos;. 的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.RegionNotInRegionManagerException">
+            <summary>
+              查找类似 The region manager does not contain the {0} region. 的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.RegionViewExistsException">
+            <summary>
+              查找类似 View already exists in region. 的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.RegionViewNameExistsException">
+            <summary>
+              查找类似 View with name &apos;{0}&apos; already exists in the region. 的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.StartupModuleDependsOnAnOnDemandModule">
+            <summary>
+              查找类似 Module {0} is marked for automatic initialization when the application starts, but it depends on modules that are marked as OnDemand initialization. To fix this error, mark the dependency modules for InitializationMode=WhenAvailable, or remove this validation by extending the ModuleCatalog class. 的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.StringCannotBeNullOrEmpty">
+            <summary>
+              查找类似 The provided String argument {0} must not be null or empty. 的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.StringCannotBeNullOrEmpty1">
+            <summary>
+              查找类似 The provided String argument {0} must not be null or empty. 的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.TypeWithKeyNotRegistered">
+            <summary>
+              查找类似 No BehaviorType with key &apos;{0}&apos; was registered. 的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.UpdateRegionException">
+            <summary>
+              查找类似 An exception occurred while trying to create region objects. 
+               - The most likely causing exception was: &apos;{0}&apos;.
+               But also check the InnerExceptions for more detail or call .GetRootException().  的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.ValueMustBeOfTypeModuleInfo">
+            <summary>
+              查找类似 The value must be of type ModuleInfo. 的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.ValueNotFound">
+            <summary>
+              查找类似 {0} not found. 的本地化字符串。
+            </summary>
+        </member>
+        <member name="P:MVVM.Properties.Resources.ViewNotInRegionException">
+            <summary>
+              查找类似 The region does not contain the specified view. 的本地化字符串。
+            </summary>
+        </member>
+        <member name="T:MVVM.ViewModel.DelegateCommand">
+            <summary>
+            An <see cref="T:System.Windows.Input.ICommand" /> whose delegates do not take any parameters for <see cref="M:MVVM.ViewModel.DelegateCommand.Execute" /> and <see cref="M:MVVM.ViewModel.DelegateCommand.CanExecute" />.
+            </summary>
+            <seealso cref="T:MVVM.ViewModel.DelegateCommandBase" />
+            <seealso cref="T:MVVM.ViewModel.DelegateCommand`1" />
+        </member>
+        <member name="M:MVVM.ViewModel.DelegateCommand.#ctor(System.Action)">
+            <summary>
+            Creates a new instance of <see cref="T:MVVM.ViewModel.DelegateCommand" /> with the <see cref="T:System.Action" /> to invoke on execution.
+            </summary>
+            <param name="executeMethod">The <see cref="T:System.Action" /> to invoke when <see cref="M:System.Windows.Input.ICommand.Execute(System.Object)" /> is called.</param>
+        </member>
+        <member name="M:MVVM.ViewModel.DelegateCommand.#ctor(System.Action,System.Func{System.Boolean})">
+            <summary>
+            Creates a new instance of <see cref="T:MVVM.ViewModel.DelegateCommand" /> with the <see cref="T:System.Action" /> to invoke on execution
+            and a <see langword="Func" /> to query for determining if the command can execute.
+            </summary>
+            <param name="executeMethod">The <see cref="T:System.Action" /> to invoke when <see cref="M:System.Windows.Input.ICommand.Execute(System.Object)" /> is called.</param>
+            <param name="canExecuteMethod">The <see cref="T:System.Func`1" /> to invoke when <see cref="M:System.Windows.Input.ICommand.CanExecute(System.Object)" /> is called</param>
+        </member>
+        <member name="M:MVVM.ViewModel.DelegateCommand.CanExecute">
+            <summary>
+            Determines if the command can be executed.
+            </summary>
+            <returns>Returns <see langword="true" /> if the command can execute,otherwise returns <see langword="false" />.</returns>
+        </member>
+        <member name="M:MVVM.ViewModel.DelegateCommand.Execute">
+            <summary>
+             Executes the command.
+            </summary>
+        </member>
+        <member name="T:MVVM.ViewModel.DelegateCommand`1">
+            <summary>
+            An <see cref="T:System.Windows.Input.ICommand" /> whose delegates can be attached for <see cref="M:MVVM.ViewModel.DelegateCommand`1.Execute(`0)" /> and <see cref="M:MVVM.ViewModel.DelegateCommand`1.CanExecute(`0)" />.
+            It also implements the <see cref="T:MVVM.ViewModel.IActiveAware" /> interface, which is useful when registering this command in a <see cref="!:CompositeCommand" /> that monitors command's activity.
+            </summary>
+            <typeparam name="T">Parameter type.</typeparam>
+            <remarks>
+            The constructor deliberately prevent the use of value types.
+            Because ICommand takes an object, having a value type for T would cause unexpected behavior when CanExecute(null) is called during XAML initialization for command bindings.
+            Using default(T) was considered and rejected as a solution because the implementor would not be able to distinguish between a valid and defaulted values.
+            <para />
+            Instead, callers should support a value type by using a nullable value type and checking the HasValue property before using the Value property.
+            <example>
+                <code>
+            public MyClass()
+            {
+                this.submitCommand = new DelegateCommand&lt;int?&gt;(this.Submit, this.CanSubmit);
+            }
+            private bool CanSubmit(int? customerId)
+            {
+                return (customerId.HasValue &amp;&amp; customers.Contains(customerId.Value));
+            }
+                </code>
+            </example>
+            </remarks>
+        </member>
+        <member name="M:MVVM.ViewModel.DelegateCommand`1.#ctor(System.Action{`0})">
+            <summary>
+            Initializes a new instance of <see cref="T:MVVM.ViewModel.DelegateCommand`1" />.
+            </summary>
+            <param name="executeMethod">Delegate to execute when Execute is called on the command.  This can be null to just hook up a CanExecute delegate.</param>
+            <remarks><seealso cref="M:MVVM.ViewModel.DelegateCommand`1.CanExecute(`0)" /> will always return true.</remarks>
+        </member>
+        <member name="M:MVVM.ViewModel.DelegateCommand`1.#ctor(System.Action{`0},System.Func{`0,System.Boolean})">
+            <summary>
+            Initializes a new instance of <see cref="T:MVVM.ViewModel.DelegateCommand`1" />.
+            </summary>
+            <param name="executeMethod">Delegate to execute when Execute is called on the command.  This can be null to just hook up a CanExecute delegate.</param>
+            <param name="canExecuteMethod">Delegate to execute when CanExecute is called on the command.  This can be null.</param>
+            <exception cref="T:System.ArgumentNullException">When both <paramref name="executeMethod" /> and <paramref name="canExecuteMethod" /> ar <see langword="null" />.</exception>
+        </member>
+        <member name="M:MVVM.ViewModel.DelegateCommand`1.CanExecute(`0)">
+            <summary>
+            Determines if the command can execute by invoked the <see cref="T:System.Func`2" /> provided during construction.
+            </summary>
+            <param name="parameter">Data used by the command to determine if it can execute.</param>
+            <returns>
+            <see langword="true" /> if this command can be executed; otherwise, <see langword="false" />.
+            </returns>
+        </member>
+        <member name="M:MVVM.ViewModel.DelegateCommand`1.Execute(`0)">
+            <summary>
+            Executes the command and invokes the <see cref="T:System.Action`1" /> provided during construction.
+            </summary>
+            <param name="parameter">Data used by the command.</param>
+        </member>
+        <member name="T:MVVM.ViewModel.DelegateCommandBase">
+            <summary>
+            An <see cref="T:System.Windows.Input.ICommand" /> whose delegates can be attached for <see
+            cref="M:MVVM.ViewModel.DelegateCommandBase.Execute(System.Object)" /> and <see
+            cref="M:MVVM.ViewModel.DelegateCommandBase.CanExecute(System.Object)" />. It also
+            implements the <see cref="T:MVVM.ViewModel.IActiveAware" /> interface, which is
+            useful when registering this command in a <see cref="!:CompositeCommand" /> that monitors
+            command's activity.
+            </summary>
+        </member>
+        <member name="P:MVVM.ViewModel.DelegateCommandBase.IsActive">
+            <summary>
+            Gets or sets a value indicating whether the object is active.
+            </summary>
+            <value>
+            <see langword="true" /> if the object is active; otherwise <see langword="false" />.
+            </value>
+        </member>
+        <member name="M:MVVM.ViewModel.DelegateCommandBase.#ctor(System.Action{System.Object},System.Func{System.Object,System.Boolean})">
+            <summary>
+            Createse a new instance of a <see cref="T:MVVM.ViewModel.DelegateCommandBase"
+            />, specifying both the execute action and the can execute function.
+            </summary>
+            <param name="executeMethod">
+            The <see cref="T:System.Action" /> to execute when <see
+            cref="M:System.Windows.Input.ICommand.Execute(System.Object)" /> is invoked.
+            </param>
+            <param name="canExecuteMethod">
+            The <see cref="T:System.Func`2" /> to invoked when <see
+            cref="M:System.Windows.Input.ICommand.CanExecute(System.Object)" /> is invoked.
+            </param>
+        </member>
+        <member name="M:MVVM.ViewModel.DelegateCommandBase.CanExecute(System.Object)">
+            <summary>
+            Determines if the command can execute with the provided parameter by invoing the <see
+            cref="T:System.Func`2" /> supplied during construction.
+            </summary>
+            <param name="parameter">
+            The parameter to use when determining if this command can execute.
+            </param>
+            <returns>
+            Returns <see langword="true" /> if the command can execute. <see langword="False" /> otherwise.
+            </returns>
+        </member>
+        <member name="M:MVVM.ViewModel.DelegateCommandBase.Execute(System.Object)">
+            <summary>
+            Executes the command with the provided parameter by invoking the <see
+            cref="T:System.Action`1" /> supplied during construction.
+            </summary>
+            <param name="parameter"> </param>
+        </member>
+        <member name="M:MVVM.ViewModel.DelegateCommandBase.OnCanExecuteChanged">
+            <summary>
+            Raises <see cref="E:System.Windows.Input.ICommand.CanExecuteChanged" /> on the UI thread
+            so every command invoker can requery <see
+            cref="M:System.Windows.Input.ICommand.CanExecute(System.Object)" /> to check if the <see
+            cref="!:CompositeCommand" /> can execute.
+            </summary>
+        </member>
+        <member name="M:MVVM.ViewModel.DelegateCommandBase.OnIsActiveChanged">
+            <summary>
+            This raises the <see
+            cref="E:MVVM.ViewModel.DelegateCommandBase.IsActiveChanged" /> event.
+            </summary>
+        </member>
+        <member name="M:MVVM.ViewModel.DelegateCommandBase.RaiseCanExecuteChanged">
+            <summary>
+            Raises <see cref="E:MVVM.ViewModel.DelegateCommandBase.CanExecuteChanged" />
+            on the UI thread so every command invoker can requery to check if the command can
+            execute. <remarks>Note that this will trigger the execution of <see
+            cref="M:MVVM.ViewModel.DelegateCommandBase.CanExecute(System.Object)" /> once
+            for each invoker.</remarks>
+            </summary>
+        </member>
+        <member name="E:MVVM.ViewModel.DelegateCommandBase.CanExecuteChanged">
+            <summary>
+            Occurs when changes occur that affect whether or not the command should execute. You
+            must keep a hard reference to the handler to avoid garbage collection and unexpected
+            results. See remarks for more information.
+            </summary>
+            <remarks>
+            When subscribing to the <see cref="E:System.Windows.Input.ICommand.CanExecuteChanged" />
+            event using code (not when binding using XAML) will need to keep a hard reference to the
+            event handler. This is to prevent garbage collection of the event handler because the
+            command implements the Weak Event pattern so it does not have a hard reference to this
+            handler. An example implementation can be seen in the CompositeCommand and
+            CommandBehaviorBase classes. In most scenarios, there is no reason to sign up to the
+            CanExecuteChanged event directly, but if you do, you are responsible for maintaining the reference.
+            </remarks>
+            <example>
+            The following code holds a reference to the event handler. The myEventHandlerReference
+            value should be stored in an instance member to avoid it from being garbage collected.
+            <code> EventHandler myEventHandlerReference = new
+            EventHandler(this.OnCanExecuteChanged); command.CanExecuteChanged +=
+            myEventHandlerReference; </code>
+            </example>
+        </member>
+        <member name="E:MVVM.ViewModel.DelegateCommandBase.IsActiveChanged">
+            <summary>
+            Fired if the <see cref="P:MVVM.ViewModel.DelegateCommandBase.IsActive" />
+            property changes.
+            </summary>
+        </member>
+        <member name="T:MVVM.ViewModel.IActiveAware">
+            <summary>
+            Interface that defines if the object instance is active and notifies when the activity changes.
+            </summary>
+        </member>
+        <member name="E:MVVM.ViewModel.IActiveAware.IsActiveChanged">
+            <summary>
+            Notifies that the value for <see cref="P:MVVM.ViewModel.IActiveAware.IsActive" /> property has changed.
+            </summary>
+        </member>
+        <member name="P:MVVM.ViewModel.IActiveAware.IsActive">
+            <summary>
+            Gets or sets a value indicating whether the object is active.
+            </summary>
+            <value>
+            <see langword="true" /> if the object is active; otherwise <see langword="false" />.
+            </value>
+        </member>
+        <member name="T:MVVM.ViewModel.WeakEventHandlerManager">
+            <summary>
+            Handles management and dispatching of EventHandlers in a weak way.
+            </summary>
+        </member>
+        <member name="M:MVVM.ViewModel.WeakEventHandlerManager.CallWeakReferenceHandlers(System.Object,System.Collections.Generic.List{System.WeakReference})">
+            <summary>
+             Invokes the handlers
+            </summary>
+            <param name="sender"></param>
+            <param name="handlers"></param>
+        </member>
+        <member name="T:MVVM.ViewModel.WeakEventHandlerManager.DispatcherProxy">
+            <summary>
+            Hides the dispatcher mis-match between Silverlight and .Net, largely so code reads a bit easier
+            </summary>
+        </member>
+        <member name="M:MVVM.ViewModel.WeakEventHandlerManager.AddWeakReferenceHandler(System.Collections.Generic.List{System.WeakReference}@,System.EventHandler,System.Int32)">
+            <summary>
+             Adds a handler to the supplied list in a weak way.
+            </summary>
+            <param name="handlers">Existing handler list.  It will be created if null.</param>
+            <param name="handler">Handler to add.</param>
+            <param name="defaultListSize">Default list size.</param>
+        </member>
+        <member name="M:MVVM.ViewModel.WeakEventHandlerManager.RemoveWeakReferenceHandler(System.Collections.Generic.List{System.WeakReference},System.EventHandler)">
+            <summary>
+             Removes an event handler from the reference list.
+            </summary>
+            <param name="handlers">Handler list to remove reference from.</param>
+            <param name="handler">Handler to remove.</param>
+        </member>
+        <member name="T:MVVM.ViewModel.WindowCloseCommand">
+            <summary>
+            关闭窗口
+            </summary>
+        </member>
+        <member name="M:MVVM.ViewModel.WindowCloseCommand.CanExecute(System.Object)">
+            <summary>
+            判断是否可执行
+            </summary>
+            <param name="parameter"> </param>
+            <returns> </returns>
+        </member>
+        <member name="E:MVVM.ViewModel.WindowCloseCommand.CanExecuteChanged">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="M:MVVM.ViewModel.WindowCloseCommand.Execute(System.Object)">
+            <summary>
+            执行
+            </summary>
+            <param name="parameter"> </param>
+        </member>
+        <member name="T:MVVM.ViewModel.WindowMaximizedCommand">
+            <summary>
+            最大化
+            </summary>
+        </member>
+        <member name="M:MVVM.ViewModel.WindowMaximizedCommand.CanExecute(System.Object)">
+            <summary>
+            判断是否可以执行
+            </summary>
+            <param name="parameter"> </param>
+            <returns> </returns>
+        </member>
+        <member name="E:MVVM.ViewModel.WindowMaximizedCommand.CanExecuteChanged">
+            <summary>
+            事件
+            </summary>
+        </member>
+        <member name="M:MVVM.ViewModel.WindowMaximizedCommand.Execute(System.Object)">
+            <summary>
+            执行任务
+            </summary>
+            <param name="parameter"> </param>
+        </member>
+        <member name="T:MVVM.ViewModel.WindowMinimizedCommand">
+            <summary>
+            最小化
+            </summary>
+        </member>
+        <member name="M:MVVM.ViewModel.WindowMinimizedCommand.CanExecute(System.Object)">
+            <summary>
+            判断是否可执行
+            </summary>
+            <param name="parameter"> </param>
+            <returns> </returns>
+        </member>
+        <member name="E:MVVM.ViewModel.WindowMinimizedCommand.CanExecuteChanged">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="M:MVVM.ViewModel.WindowMinimizedCommand.Execute(System.Object)">
+            <summary>
+            执行
+            </summary>
+            <param name="parameter"> </param>
+        </member>
+        <member name="T:MVVM.ViewModel.WindowNormalCommand">
+            <summary>
+            正常
+            </summary>
+        </member>
+        <member name="M:MVVM.ViewModel.WindowNormalCommand.CanExecute(System.Object)">
+             <summary>
+            
+             </summary>
+             <param name="parameter"></param>
+             <returns></returns>
+        </member>
+        <member name="E:MVVM.ViewModel.WindowNormalCommand.CanExecuteChanged">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="M:MVVM.ViewModel.WindowNormalCommand.Execute(System.Object)">
+             <summary>
+            
+             </summary>
+             <param name="parameter"></param>
+        </member>
+        <member name="T:MVVM.Win32">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="T:MVVM.Win32.HitTest">
+            <summary>
+            Indicates the position of the cursor hot spot.
+            </summary>
+        </member>
+        <member name="F:MVVM.Win32.HitTest.HTERROR">
+            <summary>
+            On the screen background or on a dividing line between windows (same as HTNOWHERE,
+            except that the DefWindowProc function produces a system beep to indicate an error).
+            </summary>
+        </member>
+        <member name="F:MVVM.Win32.HitTest.HTTRANSPARENT">
+            <summary>
+            In a window currently covered by another window in the same thread (the message will
+            be sent to underlying windows in the same thread until one of them returns a code
+            that is not HTTRANSPARENT).
+            </summary>
+        </member>
+        <member name="F:MVVM.Win32.HitTest.HTNOWHERE">
+            <summary>
+            On the screen background or on a dividing line between windows.
+            </summary>
+        </member>
+        <member name="F:MVVM.Win32.HitTest.HTCLIENT">
+            <summary>
+            In a client area.
+            </summary>
+        </member>
+        <member name="F:MVVM.Win32.HitTest.HTCAPTION">
+            <summary>
+            In a title bar.
+            </summary>
+        </member>
+        <member name="F:MVVM.Win32.HitTest.HTSYSMENU">
+            <summary>
+            In a window menu or in a Close button in a child window.
+            </summary>
+        </member>
+        <member name="F:MVVM.Win32.HitTest.HTGROWBOX">
+            <summary>
+            In a size box (same as HTSIZE).
+            </summary>
+        </member>
+        <member name="F:MVVM.Win32.HitTest.HTSIZE">
+            <summary>
+            In a size box (same as HTGROWBOX).
+            </summary>
+        </member>
+        <member name="F:MVVM.Win32.HitTest.HTMENU">
+            <summary>
+            In a menu.
+            </summary>
+        </member>
+        <member name="F:MVVM.Win32.HitTest.HTHSCROLL">
+            <summary>
+            In a horizontal scroll bar.
+            </summary>
+        </member>
+        <member name="F:MVVM.Win32.HitTest.HTVSCROLL">
+            <summary>
+            In the vertical scroll bar.
+            </summary>
+        </member>
+        <member name="F:MVVM.Win32.HitTest.HTMINBUTTON">
+            <summary>
+            In a Minimize button.
+            </summary>
+        </member>
+        <member name="F:MVVM.Win32.HitTest.HTREDUCE">
+            <summary>
+            In a Minimize button.
+            </summary>
+        </member>
+        <member name="F:MVVM.Win32.HitTest.HTMAXBUTTON">
+            <summary>
+            In a Maximize button.
+            </summary>
+        </member>
+        <member name="F:MVVM.Win32.HitTest.HTZOOM">
+            <summary>
+            In a Maximize button.
+            </summary>
+        </member>
+        <member name="F:MVVM.Win32.HitTest.HTLEFT">
+            <summary>
+            In the left border of a resizable window (the user can click the mouse to resize the
+            window horizontally).
+            </summary>
+        </member>
+        <member name="F:MVVM.Win32.HitTest.HTRIGHT">
+            <summary>
+            In the right border of a resizable window (the user can click the mouse to resize
+            the window horizontally).
+            </summary>
+        </member>
+        <member name="F:MVVM.Win32.HitTest.HTTOP">
+            <summary>
+            In the upper-horizontal border of a window.
+            </summary>
+        </member>
+        <member name="F:MVVM.Win32.HitTest.HTTOPLEFT">
+            <summary>
+            In the upper-left corner of a window border.
+            </summary>
+        </member>
+        <member name="F:MVVM.Win32.HitTest.HTTOPRIGHT">
+            <summary>
+            In the upper-right corner of a window border.
+            </summary>
+        </member>
+        <member name="F:MVVM.Win32.HitTest.HTBOTTOM">
+            <summary>
+            In the lower-horizontal border of a resizable window (the user can click the mouse
+            to resize the window vertically).
+            </summary>
+        </member>
+        <member name="F:MVVM.Win32.HitTest.HTBOTTOMLEFT">
+            <summary>
+            In the lower-left corner of a border of a resizable window (the user can click the
+            mouse to resize the window diagonally).
+            </summary>
+        </member>
+        <member name="F:MVVM.Win32.HitTest.HTBOTTOMRIGHT">
+            <summary>
+            In the lower-right corner of a border of a resizable window (the user can click the
+            mouse to resize the window diagonally).
+            </summary>
+        </member>
+        <member name="F:MVVM.Win32.HitTest.HTBORDER">
+            <summary>
+            In the border of a window that does not have a sizing border.
+            </summary>
+        </member>
+        <member name="F:MVVM.Win32.HitTest.HTCLOSE">
+            <summary>
+            In a Close button.
+            </summary>
+        </member>
+        <member name="F:MVVM.Win32.HitTest.HTHELP">
+            <summary>
+            In a Help button.
+            </summary>
+        </member>
+        <member name="F:MVVM.Win32.WM_NCLBUTTONDOWN">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="M:MVVM.Win32.SendMessage(System.IntPtr,System.Int32,System.Int32,System.Int32)">
+             <summary>
+            
+             </summary>
+             <param name="hwnd"></param>
+             <param name="wMsg"></param>
+             <param name="wParam"></param>
+             <param name="lParam"></param>
+             <returns></returns>
+        </member>
+        <member name="F:MVVM.Win32.WM_NCHITTEST">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="F:MVVM.Win32.WM_GETMINMAXINFO">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="F:MVVM.Win32.MONITOR_DEFAULTTONEAREST">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="M:MVVM.Win32.MonitorFromWindow(System.IntPtr,System.Int32)">
+             <summary>
+            
+             </summary>
+             <param name="hwnd"></param>
+             <param name="dwFlags"></param>
+             <returns></returns>
+        </member>
+        <member name="T:MVVM.Win32.RECT">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="F:MVVM.Win32.RECT.Left">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="F:MVVM.Win32.RECT.Top">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="F:MVVM.Win32.RECT.Right">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="F:MVVM.Win32.RECT.Bottom">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="T:MVVM.Win32.MONITORINFOEX">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="F:MVVM.Win32.MONITORINFOEX.cbSize">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="F:MVVM.Win32.MONITORINFOEX.rcMonitor">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="F:MVVM.Win32.MONITORINFOEX.rcWork">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="F:MVVM.Win32.MONITORINFOEX.dwFlags">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="F:MVVM.Win32.MONITORINFOEX.szDevice">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="T:MVVM.Win32.POINT">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="F:MVVM.Win32.POINT.x">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="F:MVVM.Win32.POINT.y">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="M:MVVM.Win32.POINT.#ctor(System.Int32,System.Int32)">
+             <summary>
+            
+             </summary>
+             <param name="x"></param>
+             <param name="y"></param>
+        </member>
+        <member name="T:MVVM.Win32.MINMAXINFO">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="F:MVVM.Win32.MINMAXINFO.ptReserved">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="F:MVVM.Win32.MINMAXINFO.ptMaxSize">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="F:MVVM.Win32.MINMAXINFO.ptMaxPosition">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="F:MVVM.Win32.MINMAXINFO.ptMinTrackSize">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="F:MVVM.Win32.MINMAXINFO.ptMaxTrackSize">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="M:MVVM.Win32.GetMonitorInfo(System.Runtime.InteropServices.HandleRef,MVVM.Win32.MONITORINFOEX)">
+             <summary>
+            
+             </summary>
+             <param name="hmonitor"></param>
+             <param name="monitorInfo"></param>
+             <returns></returns>
+        </member>
+        <member name="T:MVVM.UIElementHelper">
+            <summary>
+            界面帮助类
+            </summary>
+        </member>
+        <member name="M:MVVM.UIElementHelper.InIValidation``1(System.Windows.FrameworkElement,``0)">
+            <summary>
+            初始化界面实体验证
+            </summary>
+        </member>
+        <member name="T:MVVM.View.BoolToVisibilityConverter">
+            <summary>
+            布尔值显示值转换器
+            </summary>
+        </member>
+        <member name="P:MVVM.View.BoolToVisibilityConverter.TrueValue">
+            <summary>
+            True值
+            </summary>
+        </member>
+        <member name="P:MVVM.View.BoolToVisibilityConverter.FalseValue">
+            <summary>
+            False值
+            </summary>
+        </member>
+        <member name="M:MVVM.View.BoolToVisibilityConverter.#ctor">
+            <summary>
+            构造函数
+            </summary>
+        </member>
+        <member name="M:MVVM.View.BoolToVisibilityConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            转换
+            </summary>
+            <param name="value"> </param>
+            <param name="targetType"> </param>
+            <param name="parameter"> </param>
+            <param name="culture"> </param>
+            <returns> </returns>
+        </member>
+        <member name="M:MVVM.View.BoolToVisibilityConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            转换
+            </summary>
+            <param name="value"> </param>
+            <param name="targetType"> </param>
+            <param name="parameter"> </param>
+            <param name="culture"> </param>
+            <returns> </returns>
+        </member>
+        <member name="T:MVVM.View.DragInCanvasBehavior">
+            <summary>
+            将状态信息和零个或更多个 ICommand 封装到一个可附加的对象中。
+            </summary>
+        </member>
+        <member name="F:MVVM.View.DragInCanvasBehavior.canvas">
+            <summary>
+            画板
+            </summary>
+        </member>
+        <member name="F:MVVM.View.DragInCanvasBehavior.window">
+            <summary>
+            控件所在窗口
+            </summary>
+        </member>
+        <member name="M:MVVM.View.DragInCanvasBehavior.OnAttached">
+            <summary>
+            在行为附加到 AssociatedObject 后调用。
+            </summary>
+        </member>
+        <member name="M:MVVM.View.DragInCanvasBehavior.OnDetaching">
+            <summary>
+            在行为与其 AssociatedObject 分离时（但在它实际发生之前）调用。
+            </summary>
+        </member>
+        <member name="M:MVVM.View.DragInCanvasBehavior.AssociatedObject_MouseLeftButtonDown(System.Object,System.Windows.Input.MouseButtonEventArgs)">
+            <summary>
+            鼠标左键按下
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:MVVM.View.DragInCanvasBehavior.AssociatedObject_MouseMove(System.Object,System.Windows.Input.MouseEventArgs)">
+            <summary>
+            鼠标移动
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:MVVM.View.DragInCanvasBehavior.window_SizeChanged(System.Object,System.Windows.SizeChangedEventArgs)">
+            <summary>
+            窗口改变大小
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:MVVM.View.DragInCanvasBehavior.SetLocation(System.Double,System.Double)">
+            <summary>
+            设置位置
+            </summary>
+            <param name="left"></param>
+            <param name="top"></param>
+        </member>
+        <member name="M:MVVM.View.DragInCanvasBehavior.AssociatedObject_MouseLeftButtonUp(System.Object,System.Windows.Input.MouseButtonEventArgs)">
+            <summary>
+            鼠标左键释放
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="T:MVVM.View.PasswordHelper">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="F:MVVM.View.PasswordHelper.PasswordProperty">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="F:MVVM.View.PasswordHelper.AttachProperty">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="F:MVVM.View.PasswordHelper.IsUpdatingProperty">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="M:MVVM.View.PasswordHelper.SetAttach(System.Windows.DependencyObject,System.Boolean)">
+             <summary>
+            
+             </summary>
+             <param name="dp"></param>
+             <param name="value"></param>
+        </member>
+        <member name="M:MVVM.View.PasswordHelper.GetAttach(System.Windows.DependencyObject)">
+             <summary>
+            
+             </summary>
+             <param name="dp"></param>
+             <returns></returns>
+        </member>
+        <member name="M:MVVM.View.PasswordHelper.GetPassword(System.Windows.DependencyObject)">
+             <summary>
+            
+             </summary>
+             <param name="dp"></param>
+             <returns></returns>
+        </member>
+        <member name="M:MVVM.View.PasswordHelper.SetPassword(System.Windows.DependencyObject,System.String)">
+             <summary>
+            
+             </summary>
+             <param name="dp"></param>
+             <param name="value"></param>
+        </member>
+        <member name="M:MVVM.View.PasswordHelper.GetIsUpdating(System.Windows.DependencyObject)">
+             <summary>
+            
+             </summary>
+             <param name="dp"></param>
+             <returns></returns>
+        </member>
+        <member name="M:MVVM.View.PasswordHelper.SetIsUpdating(System.Windows.DependencyObject,System.Boolean)">
+             <summary>
+            
+             </summary>
+             <param name="dp"></param>
+             <param name="value"></param>
+        </member>
+        <member name="M:MVVM.View.PasswordHelper.OnPasswordPropertyChanged(System.Windows.DependencyObject,System.Windows.DependencyPropertyChangedEventArgs)">
+             <summary>
+            
+             </summary>
+             <param name="sender"></param>
+             <param name="e"></param>
+        </member>
+        <member name="M:MVVM.View.PasswordHelper.Attach(System.Windows.DependencyObject,System.Windows.DependencyPropertyChangedEventArgs)">
+             <summary>
+            
+             </summary>
+             <param name="sender"></param>
+             <param name="e"></param>
+        </member>
+        <member name="M:MVVM.View.PasswordHelper.PasswordChanged(System.Object,System.Windows.RoutedEventArgs)">
+             <summary>
+            
+             </summary>
+             <param name="sender"></param>
+             <param name="e"></param>
+        </member>
+        <member name="T:MVVM.Controls.PageView">
+            <summary>
+            PageView.xaml 的交互逻辑
+            </summary>
+            <summary>
+            PageView
+            </summary>
+        </member>
+        <member name="M:MVVM.Controls.PageView.#ctor">
+            <summary>
+            分页控件
+            </summary>
+        </member>
+        <member name="M:MVVM.Controls.PageView.PageViewViewModel_Loaded(System.Object,System.Windows.RoutedEventArgs)">
+            <summary>
+            
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="F:MVVM.Controls.PageView.PageModelDependencyProperty">
+            <summary>
+            绑定声明
+            </summary>
+        </member>
+        <member name="P:MVVM.Controls.PageView.PageViewModel">
+            <summary>
+            分页实体
+            </summary>
+        </member>
+        <member name="P:MVVM.Controls.PageView.ChangePage">
+            <summary>
+            分页事件
+            </summary>
+        </member>
+        <member name="M:MVVM.Controls.PageView.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:MVVM.Controls.PageModel">
+            <summary>
+            分页实体
+            </summary>
+        </member>
+        <member name="P:MVVM.Controls.PageModel.PageSize">
+            <summary>
+            每页显示大小
+            </summary> 
+        </member>
+        <member name="P:MVVM.Controls.PageModel.PageIndex">
+            <summary>
+            页码
+            </summary>
+        </member>
+        <member name="P:MVVM.Controls.PageModel.TotalCount">
+            <summary>
+            总条数
+            </summary>
+        </member>
+        <member name="P:MVVM.Controls.PageModel.TotalPageCount">
+            <summary>
+            总页数
+            </summary>
+        </member>
+        <member name="P:MVVM.Controls.PageModel.PageInfo">
+            <summary>
+            分页文字信息
+            </summary>
+        </member>
+        <member name="P:MVVM.Controls.PageModel.CanPrev">
+            <summary>
+            可以向前翻页
+            </summary>
+        </member>
+        <member name="P:MVVM.Controls.PageModel.CanNext">
+            <summary>
+            可以向后翻页
+            </summary>
+        </member>
+        <member name="P:MVVM.Controls.PageModel.CanGo">
+            <summary>
+            可以翻页
+            </summary>
+        </member>
+        <member name="E:MVVM.Controls.PageModel.ChangePageEvent">
+            <summary>
+            当进行翻页时执行
+            </summary>
+        </member>
+        <member name="M:MVVM.Controls.PageModel.ChangePage">
+            <summary>
+            绑定方法
+            </summary>
+        </member>
+        <member name="M:MVVM.Controls.PageModel.ChangePaged">
+            <summary>
+            分页完成
+            </summary>
+        </member>
+        <member name="M:MVVM.Controls.PageModel.ChangePaging">
+            <summary>
+            分页开始
+            </summary>
+        </member>
+        <member name="T:MVVM.Controls.EventPageingHandler">
+            <summary>
+            分页事件委托
+            </summary>
+            <param name="e"></param>
+            <returns></returns>
+        </member>
+        <member name="T:MVVM.Controls.EventPagingArg">
+            <summary>
+            分页参数
+            </summary>
+        </member>
+        <member name="P:MVVM.Controls.EventPagingArg.PageModel">
+            <summary>
+            分页实体参数
+            </summary>
+        </member>
+        <member name="T:MVVM.Controls.EventPageingHandler`1">
+            <summary>
+            分页事件委托
+            </summary>
+            <param name="e"></param>
+            <returns></returns>
+        </member>
+        <member name="T:MVVM.Controls.EventPagingArg`1">
+            <summary>
+            分页参数
+            </summary>
+        </member>
+        <member name="P:MVVM.Controls.EventPagingArg`1.PageModel">
+            <summary>
+            分页实体参数
+            </summary>
+        </member>
+        <member name="T:MVVM.Controls.PageViewModel`1">
+            <summary>
+            分页实体
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:MVVM.Controls.PageViewModel`1.#ctor">
+            <summary>
+            构造函数
+            </summary>
+        </member>
+        <member name="P:MVVM.Controls.PageViewModel`1.ObservableCollectionObject">
+            <summary>
+            展示列表数据
+            </summary>
+        </member>
+        <member name="E:MVVM.Controls.PageViewModel`1.ChangePageEvent">
+            <summary>
+            当进行翻页时执行
+            </summary>
+        </member>
+        <member name="M:MVVM.Controls.PageViewModel`1.ChangePage">
+            <summary>
+            分页绑定
+            </summary>
+        </member>
+        <member name="F:MVVM.Controls.PageViewModel`1.ChangePageFun">
+            <summary>
+            翻页查询扩展方法
+            </summary>
+        </member>
+        <member name="M:MVVM.Controls.PageViewModel`1.ChangePage(System.Func{System.Collections.Generic.List{`0}})">
+            <summary>
+            分页绑定
+            </summary>
+            <param name="fun">翻页查询扩展方法</param>
+        </member>
+        <member name="M:MVVM.Controls.PageViewModel`1.ToList">
+            <summary>
+            将数据转换成列表
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MVVM.Controls.PageViewModel`1.Fill(System.Collections.Generic.List{`0})">
+            <summary>
+            填充数据到绑定结果集中
+            </summary>
+        </member>
+    </members>
+</doc>

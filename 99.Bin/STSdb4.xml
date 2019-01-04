@@ -1,0 +1,459 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>STSdb4</name>
+    </assembly>
+    <members>
+        <member name="M:STSdb4.Database.IStorageEngine.OpenXTablePortable(System.String,STSdb4.Data.DataType,STSdb4.Data.DataType)">
+            <summary>
+            Works with anonymous types.
+            </summary>
+        </member>
+        <member name="M:STSdb4.Database.IStorageEngine.OpenXTablePortable``2(System.String,STSdb4.Data.DataType,STSdb4.Data.DataType,STSdb4.Data.ITransformer{``0,STSdb4.Data.IData},STSdb4.Data.ITransformer{``1,STSdb4.Data.IData})">
+            <summary>
+            Works with portable types via custom transformers.
+            </summary>
+        </member>
+        <member name="M:STSdb4.Database.IStorageEngine.OpenXTablePortable``2(System.String)">
+            <summary>
+            Works with anonymous types via default transformers.
+            </summary>
+        </member>
+        <member name="M:STSdb4.Database.IStorageEngine.OpenXTable``2(System.String)">
+            <summary>
+            Works with the user types directly.
+            </summary>
+        </member>
+        <member name="M:STSdb4.Database.IStorageEngine.OpenXFile(System.String)">
+            <summary>
+            
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:STSdb4.Database.IStorageEngine.Count" -->
+        <member name="P:STSdb4.Database.IStorageEngine.CacheSize">
+            <summary>
+            The number of nodes that are kept in memory.
+            </summary>
+        </member>
+        <member name="P:STSdb4.Database.IStorageEngine.Heap">
+            <summary>
+            Heap assigned to the StorageEngine instance.
+            </summary>
+        </member>
+        <member name="F:STSdb4.Data.AllowNull.All">
+            <summary>
+            Instance and all instance members and their members can be null.
+            </summary>
+        </member>
+        <member name="F:STSdb4.Data.AllowNull.OnlyMembers">
+            <summary>
+            Instance can not be null, but instance members and their members can be null.
+            </summary>
+        </member>
+        <member name="F:STSdb4.Data.AllowNull.None">
+            <summary>
+            Instance and instance members and their members cannot be null (the default and most space efficient variant).
+            </summary>
+        </member>
+        <member name="M:STSdb4.General.Collections.OrderedSet`2.Reset">
+            <summary>
+            clear all data and set ordered set to default list mode
+            </summary>
+        </member>
+        <member name="M:STSdb4.General.Collections.OrderedSet`2.Merge(STSdb4.General.Collections.IOrderedSet{`0,`1})">
+            <summary>
+            All keys in the input set must be less than all keys in the current set OR all keys in the input set must be greater than all keys in the current set.
+            </summary>
+        </member>
+        <member name="M:STSdb4.General.Compression.CountCompression.Serialize(System.IO.BinaryWriter,System.UInt64)">
+            <summary>
+            Compress value of count by CountCompression, and stores result in BinaryWriter
+            </summary>
+            <param name="count">Value for compression.</param>
+        </member>
+        <member name="M:STSdb4.General.Compression.CountCompression.Deserialize(System.IO.BinaryReader)">
+            <summary>
+            Decompress a value compressed with CountCompression by successively reading bytes from BinaryReader.
+            </summary>       
+        </member>
+        <member name="F:STSdb4.General.Extensions.DecimalHelper.Write">
+            <summary>
+            Writes a decimal value into an int[] array in the same order as a BinaryWriter - d.lo, d.mid, d.hi, d.flags.
+            </summary>
+        </member>
+        <member name="F:STSdb4.General.Extensions.DecimalHelper.Constructor">
+            <summary>
+            Create decimal from lo,mid,hi,flags
+            </summary>
+        </member>
+        <member name="M:STSdb4.General.Extensions.ListExtensions.Split``1(System.Collections.Generic.List{``0},System.Int32)">
+            <summary>
+            Splits the list into two parts, where the right part contains count elements and returns the right part of the list.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="instance"></param>
+            <param name="count"></param>
+            <returns></returns>
+        </member>
+        <member name="M:STSdb4.General.Extensions.ByteArrayExtensions.MurMurHash3(System.Byte[],System.Int32)">
+            <summary>
+            http://en.wikipedia.org/wiki/MurmurHash
+            </summary>
+            <param name="buffer"></param>
+            <param name="seed"></param>
+            <returns></returns>
+        </member>
+        <member name="M:STSdb4.General.Extensions.ByteArrayExtensions.ToHex(System.Byte[])">
+            <summary>
+            Convert byte array to hex string
+            </summary>
+            <param name="buffer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:STSdb4.General.Extensions.ExpressionExtensions.Using(System.Linq.Expressions.ParameterExpression,System.Linq.Expressions.NewExpression,System.Linq.Expressions.Expression)">
+            <summary>
+            Creates BlockExpression in format:
+            
+            using (variable = createNew)
+            {
+                body;
+            }
+            
+            or:
+            
+            var variable = createNew;
+            try
+            {
+                body;
+            }
+            finally
+            {
+                variable.Dispose();
+            }
+            
+            </summary>
+            <param name="variable">variable.Type must be IDisposable</param>
+            <param name="createNew"></param>
+            <param name="body"></param>
+            <returns></returns>
+        </member>
+        <member name="M:STSdb4.General.Extensions.ExpressionExtensions.Using(System.Linq.Expressions.ParameterExpression,System.Linq.Expressions.Expression)">
+            <summary>
+            Creates BlockExpression in format:
+            
+            using (variable)
+            {
+                body;
+            }
+            
+            or:
+            
+            try
+            {
+                body;
+            }
+            finally
+            {
+                variable.Dispose();
+            }
+            </summary>
+            <param name="variable">variable.Type must be IDisposable</param>
+            <param name="body"></param>
+            <returns></returns>
+        </member>
+        <member name="M:STSdb4.General.Extensions.ExpressionExtensions.ForEach(System.Linq.Expressions.Expression,System.Func{System.Linq.Expressions.Expression,System.Linq.Expressions.Expression},System.Linq.Expressions.LabelTarget)">
+             <summary>
+             
+            <para> var enumerator = enumerable.GetEnumerator();</para>
+            <para></para>
+            <para>while (enumerator.MoveNext())</para>
+            <para>{</para>
+            <para>    action(enumerator.Current);</para>
+            <para>}</para>
+             </summary>
+             <param name="enumerable"></param>
+             <param name="action"></param>
+             <param name="break"></param>
+             <returns></returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:STSdb4.General.Extensions.ExpressionExtensions.For(System.Linq.Expressions.Expression,System.Func{System.Linq.Expressions.Expression,System.Linq.Expressions.Expression},System.Linq.Expressions.LabelTarget)" -->
+        <member name="M:STSdb4.General.Extensions.SortedSetExtensions.ConstructFromSortedArray``1(System.Collections.Generic.SortedSet{``0},``0[],System.Int32,System.Int32)">
+            <summary>
+            Elements in array must be ordered and unique from the set.Comparer point of view.
+            </summary>
+        </member>
+        <member name="M:STSdb4.General.Extensions.SortedSetExtensions.Replace``1(System.Collections.Generic.SortedSet{``0},``0,System.Func{``0,``0,``0})">
+            <summary>
+            Replace an existing element.
+            1.If item not exists it will be added to the set.
+            2.If item already exist there is two cases:
+             - if onExists is null the new item will replace existing item;
+             - if onExists is not null the item returned by the onExist(T existingItem, T newItem) function will replace the existing item.
+            </summary>
+            <typeparam name="T">The type of the elements in the set.</typeparam>
+            <param name="set"></param>
+            <param name="item">The element to add in the set</param>
+            <param name="onExist">T onExist(T existingItem, T newItem)</param>
+            <returns>
+            Returns false if the specified item not exist in the set (insert).
+            Returns true if the specified item exist in the set (replace).
+            </returns>
+        </member>
+        <member name="M:STSdb4.General.Extensions.SortedSetExtensions.Replace``1(System.Collections.Generic.SortedSet{``0},``0)">
+            <summary>
+            Replace an existing element.
+            1.If item not exists it will be added to the set.
+            2.If item already exist the new item will replace existing item;
+            </summary>
+            <typeparam name="T">The type of the elements in the set.</typeparam>
+            <param name="set"></param>
+            <param name="item">The element to add in the set</param>
+            <returns>
+            Returns false if the specified item not exist in the set (insert).
+            Returns true if the specified item exist in the set (replace).
+            </returns>
+        </member>
+        <member name="M:STSdb4.General.Extensions.SortedSetExtensions.Split``1(System.Collections.Generic.SortedSet{``0},System.Int32)">
+            <summary>
+            Splits the set into two parts, where the right part contains count number of elements and return the right part of the set.
+            </summary>
+        </member>
+        <member name="M:STSdb4.General.Extensions.StringExtensions.ParseHex(System.String)">
+            <summary>
+            Convert string to byte array
+            </summary>
+            <param name="hex"></param>
+            <returns></returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:STSdb4.General.IO.OptimizedFileStream" -->
+        <member name="M:STSdb4.General.Persist.Int64IndexerPersist.#ctor(System.Int64[])">
+            <summary>
+            This contructor gets the factors in ascending order
+            </summary>
+        </member>
+        <member name="T:STSdb4.General.Communication.Packet">
+            --------------------- Packet Exchange Protocol
+            
+            --------------------- Comments-----------------------------------
+            format           : binary
+            byte style       : LittleEndian
+            ID               : Unique ID's per Connection and Unique ID per Packet.
+            
+            ------------------------------------------------------------------
+            Packet           : long ID, int Size, byte[] buffer 
+              
+        </member>
+        <member name="M:STSdb4.General.Mathematics.MathUtils.GetDigits(System.Decimal)">
+            <summary>
+            Returns the number of digits after the decimal point.
+            </summary>
+        </member>
+        <member name="M:STSdb4.General.Mathematics.MathUtils.GetDigits(System.Double)">
+            <summary>
+            Returns the number of digits after the decimal point;
+            </summary>
+        </member>
+        <member name="M:STSdb4.General.Mathematics.MathUtils.GetDigits(System.Single)">
+            <summary>
+            Returns the number of digits after the decimal point;
+            </summary>
+        </member>
+        <member name="M:STSdb4.Remote.XTableRemote.UpdateDescriptor">
+            <summary>
+            Updates the local descriptor with the changes from the remote
+            and retrieves up to date descriptor from the local server.
+            </summary>
+        </member>
+        <member name="T:STSdb4.Remote.Message">
+            <summary>
+            --------------------- Message Exchange Protocol
+            
+            --------------------- Comments-----------------------------------
+            Format           : binary
+            Byte style       : LittleEndian
+            String Encoding  : Unicode (UTF-8) 
+            String format    : string int size compressed with 7-bit encoding, byte[] Unicode (UTF-8)
+            
+            ------------------------------------------------------------------
+            ID                : Long ID
+                 
+            Commands          : CommandCollection
+            
+            </summary>    
+        </member>
+        <member name="F:STSdb4.Storage.AtomicHeader.SIZE">
+            <summary>
+            http://en.wikipedia.org/wiki/Advanced_Format
+            http://www.idema.org
+            </summary>
+        </member>
+        <member name="F:STSdb4.Storage.AtomicHeader.SystemData">
+            <summary>
+            System data location.
+            </summary>
+        </member>
+        <member name="M:STSdb4.Storage.Heap.Write(System.Int64,System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Before writting, handle must be obtained (registered).
+            New block will be written always with version = CurrentVersion
+            If new block is written to handle and the last block of this handle have same version with the new one, occupied space by the last block will be freed.
+            </summary>
+        </member>
+        <member name="P:STSdb4.Storage.Ptr.IsNull">
+            <summary>
+            Checking whether the pointer is invalid.
+            </summary>
+        </member>
+        <member name="P:STSdb4.Storage.Ptr.PositionPlusSize">
+            <summary>
+            Returns index of the block after fragment.
+            </summary>
+        </member>
+        <member name="T:STSdb4.Storage.AllocationStrategy">
+            <summary>
+            Strategies for free space allocation.
+            </summary>
+        </member>
+        <member name="F:STSdb4.Storage.AllocationStrategy.FromTheCurrentBlock">
+            <summary>
+            Searches for free space from the current block forwards (default behaviour).
+            </summary>
+        </member>
+        <member name="F:STSdb4.Storage.AllocationStrategy.FromTheBeginning">
+            <summary>
+            Always searches for free space from the beginning (reduces the space, but may affect the read/write speed).
+            </summary>
+        </member>
+        <member name="T:STSdb4.WaterfallTree.IHeap">
+            <summary>
+            Gives opportunity to write and read blocks referenced by logical keys (handles). The heap implementations must provide atomic commit of all writes (all or nothing) and must be thread-safe.
+            The heap implementation can rely on the fact that the majority of the created by the engine blocks are with relatively large size (> 2MB).
+            </summary>
+        </member>
+        <member name="M:STSdb4.WaterfallTree.IHeap.ObtainNewHandle">
+            <summary>
+            Register new handle. The returned handle must be always unique.
+            </summary>
+        </member>
+        <member name="M:STSdb4.WaterfallTree.IHeap.Release(System.Int64)">
+            <summary>
+            Release the allocated space behind the handle.
+            </summary>
+        </member>
+        <member name="M:STSdb4.WaterfallTree.IHeap.Exists(System.Int64)">
+            <summary>
+            Is there such handle in the heap
+            </summary>
+        </member>
+        <member name="M:STSdb4.WaterfallTree.IHeap.Write(System.Int64,System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Write data with the specified handle
+            </summary>
+        </member>
+        <member name="M:STSdb4.WaterfallTree.IHeap.Read(System.Int64)">
+            <summary>
+            Read the current data behind the handle
+            </summary>
+        </member>
+        <member name="M:STSdb4.WaterfallTree.IHeap.Commit">
+            <summary>
+            Atomic commit ALL changes in the heap (all or nothing).
+            </summary>
+        </member>
+        <member name="M:STSdb4.WaterfallTree.IHeap.Close">
+            <summary>
+            Close the heap and release any resources
+            </summary>
+        </member>
+        <member name="P:STSdb4.WaterfallTree.IHeap.Tag">
+            <summary>
+            Small user data (usually less than one physical sector), atomic written with the Commit()
+            </summary>
+        </member>
+        <member name="P:STSdb4.WaterfallTree.IHeap.DataSize">
+            <summary>
+            Total size in bytes of the user data
+            </summary>
+        </member>
+        <member name="P:STSdb4.WaterfallTree.IHeap.Size">
+            <summary>
+            Total size in bytes of the heap.
+            </summary>
+        </member>
+        <member name="M:STSdb4.WaterfallTree.WTree.Branch.#ctor(STSdb4.WaterfallTree.WTree,STSdb4.WaterfallTree.WTree.NodeType,System.Int64)">
+            <summary>
+            on load
+            </summary>
+        </member>
+        <member name="M:STSdb4.WaterfallTree.WTree.Branch.#ctor(STSdb4.WaterfallTree.WTree,STSdb4.WaterfallTree.WTree.NodeType)">
+            <summary>
+            on brand new branch
+            </summary>
+        </member>
+        <member name="P:STSdb4.WaterfallTree.WTree.Branch.NodeHandle">
+            <summary>
+            permanent and unique node handle 
+            </summary>
+        </member>
+        <member name="P:STSdb4.WaterfallTree.WTree.BranchCache.OperationCount">
+            <summary>
+            Number of all operations in cache
+            </summary>
+        </member>
+        <member name="M:STSdb4.WaterfallTree.WTree.InternalNode.FindBranch(STSdb4.WaterfallTree.Locator,STSdb4.Data.IData,STSdb4.WaterfallTree.Direction,STSdb4.WaterfallTree.WTree.FullKey@,System.Boolean@)">
+            <summary>
+            The hook.
+            </summary>
+        </member>
+        <member name="M:STSdb4.WaterfallTree.WTree.FindData(STSdb4.WaterfallTree.Locator,STSdb4.WaterfallTree.Locator,STSdb4.Data.IData,STSdb4.WaterfallTree.Direction,STSdb4.WaterfallTree.WTree.FullKey@,System.Boolean@,STSdb4.WaterfallTree.WTree.FullKey@)">
+            <summary>
+            The hook.
+            </summary>
+        </member>
+        <member name="F:STSdb4.WaterfallTree.WTree.Cache">
+            <summary>
+            Branch.NodeID -> node
+            </summary>
+        </member>
+        <member name="P:STSdb4.WaterfallTree.WTree.LeafNode.RecordCount">
+            <summary>
+            Total number of records in the node
+            </summary>
+        </member>
+        <member name="M:STSdb4.WaterfallTree.IApply.Internal(STSdb4.WaterfallTree.IOperationCollection)">
+            <summary>
+            Compact the operations and returns true, if the collection was modified.
+            </summary>
+        </member>
+        <member name="M:STSdb4.WaterfallTree.IDataContainer.Split(System.Double)">
+            <summary>
+            Exclude and returns the right half part of the ordered set.
+            </summary>
+        </member>
+        <member name="M:STSdb4.WaterfallTree.IDataContainer.Merge(STSdb4.WaterfallTree.IDataContainer)">
+            <summary>
+            Merge the specified set to the current set. The engine ensures, that all keys from the one set are less/greater than all keys from the other set.
+            </summary>
+        </member>
+        <member name="P:STSdb4.WaterfallTree.IDescriptor.KeyDataType">
+            <summary>
+            Describes the KeyType
+            </summary>
+        </member>
+        <member name="P:STSdb4.WaterfallTree.IDescriptor.RecordDataType">
+            <summary>
+            Describes the RecordType
+            </summary>
+        </member>
+        <member name="P:STSdb4.WaterfallTree.IDescriptor.KeyType">
+            <summary>
+            Can be anonymous or user type
+            </summary>
+        </member>
+        <member name="P:STSdb4.WaterfallTree.IDescriptor.RecordType">
+            <summary>
+            Can be anonymous or user type
+            </summary>
+        </member>
+    </members>
+</doc>

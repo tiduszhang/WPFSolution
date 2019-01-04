@@ -33,14 +33,14 @@ namespace PluginAPI
         /// <summary>
         /// 初始化程序
         /// </summary>
-        public static void LoadApplication()
+        public static void LoadApplication(List<string> ignorepaths = null)
         {
             if (!Directory.Exists(WorkPath.ExecPath))
             {
                 Directory.CreateDirectory(WorkPath.ExecPath);
             }
             var files = Directory.GetFiles(WorkPath.ExecPath, "*", SearchOption.AllDirectories)
-                .Where(file => !file.Contains("LibVlc") //排除第三方库不可识别的库
+                .Where(file => ignorepaths.FirstOrDefault(ignorepath => file.ToLower().Contains(ignorepath.ToLower())) == null //排除第三方库不可识别的库
                                  && file.ToLower().EndsWith(".dll".ToLower())).ToList();
             //var models = AppDomain.CurrentDomain.GetAssemblies();
             if (ApplicationAssembly == null)

@@ -99,7 +99,7 @@ namespace Common
             {
                 if (WPFApplication != null)
                 {
-                    WPFApplication.Run();
+                    WPFApplication.Run(); 
                 }
                 else if (MainWindow != null)
                 {
