@@ -57,7 +57,7 @@ namespace WelcomeScreen
             dataGrid.ItemsSource = observableCollection;
             //dataGrid.DataContext = observableCollection;
             grid1.DataContext = observableCollection[0]; 
-            "加载完成".WriteToLog(log4net.Core.Level.Info);
+            "加载完成".WriteToLog("", log4net.Core.Level.Info);
         }
 
 

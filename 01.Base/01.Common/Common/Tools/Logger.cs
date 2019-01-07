@@ -15,29 +15,31 @@ namespace Common
         /// <summary>
         /// 日志对象
         /// </summary>
-        private static log4net.ILog log = null;
+        //private static log4net.ILog log = null;
 
         /// <summary>
         /// 写入日志 
         /// </summary>
         /// <param name="value"></param>
+        /// <param name="path"></param>
         /// <param name="level"></param>
-        public static void WriteToLog(this string value, log4net.Core.Level level = null)
-        {
-            if (log == null)
+        public static void WriteToLog(this string value, string path = "", log4net.Core.Level level = null)
+        {  
+    		log4net.ILog log = null;
+
+            log4net.GlobalContext.Properties["LogUrl"] = WorkPath.ApplicationWorkPath + "\\logs\\" + path;
+
+            string config = WorkPath.ExecPath + @"\Log4net.config";
+            if (File.Exists(path))
             {
-                log4net.GlobalContext.Properties["LogUrl"] = WorkPath.ApplicationWorkPath;
-                string path = WorkPath.ExecPath + @"\Config\Log4net.config";
-                if (File.Exists(path))
-                {
-                    log4net.Config.XmlConfigurator.Configure(new System.IO.FileInfo(path));
-                    log = log4net.LogManager.GetLogger("lognet");
-                }
-                else
-                {
-                    log = log4net.LogManager.GetLogger("");
-                }
+                log4net.Config.XmlConfigurator.Configure(new System.IO.FileInfo(config));
+                log = log4net.LogManager.GetLogger("");
             }
+            else
+            {
+                log = log4net.LogManager.GetLogger("");
+            }
+			
             if (level == log4net.Core.Level.Debug)
             {
                 log.Debug(value);

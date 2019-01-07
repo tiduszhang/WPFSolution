@@ -449,6 +449,11 @@
             Allows association of a snackbar, so that notifications can be paused whilst a dialog is being displayed.
             </summary>
         </member>
+        <member name="P:MaterialDesignThemes.Wpf.DialogHost.DialogTheme">
+            <summary>
+            Set the theme (light/dark) for the dialog.
+            </summary>
+        </member>
         <member name="E:MaterialDesignThemes.Wpf.DialogHost.DialogOpened">
             <summary>
             Raised when a dialog is opened.
@@ -1273,19 +1278,39 @@
             <param name="element"></param>
             <returns></returns>
         </member>
-        <member name="F:MaterialDesignThemes.Wpf.TextFieldAssist.HasTextFieldBoxProperty">
+        <member name="F:MaterialDesignThemes.Wpf.TextFieldAssist.HasFilledTextFieldProperty">
             <summary>
-            Controls the visbility of the text field box.
+            Controls the visibility of the filled text field.
             </summary>
         </member>
-        <member name="F:MaterialDesignThemes.Wpf.TextFieldAssist.HasTextAreaBoxProperty">
+        <member name="F:MaterialDesignThemes.Wpf.TextFieldAssist.HasOutlinedTextFieldProperty">
             <summary>
             Controls the visibility of the text field area box.
             </summary>
         </member>
+        <member name="F:MaterialDesignThemes.Wpf.TextFieldAssist.TextFieldCornerRadiusProperty">
+            <summary>
+            Controls the corner radius of the surrounding box.
+            </summary>
+        </member>
+        <member name="F:MaterialDesignThemes.Wpf.TextFieldAssist.UnderlineCornerRadiusProperty">
+            <summary>
+            Controls the corner radius of the bottom line of the surrounding box.
+            </summary>
+        </member>
+        <member name="F:MaterialDesignThemes.Wpf.TextFieldAssist.NewSpecHighlightingEnabledProperty">
+            <summary>
+            Controls the highlighting style of a text box.
+            </summary>
+        </member>
+        <member name="F:MaterialDesignThemes.Wpf.TextFieldAssist.RippleOnFocusEnabledProperty">
+            <summary>
+            Enables a ripple effect on focusing the text box.
+            </summary>
+        </member>
         <member name="F:MaterialDesignThemes.Wpf.TextFieldAssist.IncludeSpellingSuggestionsProperty">
             <summary>
-            Automatially inserts spelling suggestions into the text box context menu.
+            Automatically inserts spelling suggestions into the text box context menu.
             </summary>
         </member>
         <member name="M:MaterialDesignThemes.Wpf.TextFieldAssist.ApplyTextBoxViewMargin(System.Windows.Controls.Control,System.Windows.Thickness)">
@@ -1313,6 +1338,11 @@
             <summary>
             Set to true to stop invalid text reverting back to previous valid value. Useful in cases where you
             want to display validation messages and allow the user to correct the data without it reverting.
+            </summary>
+        </member>
+        <member name="P:MaterialDesignThemes.Wpf.TimePicker.WithSeconds">
+            <summary>
+            Set to true to display seconds in the time and allow the user to select seconds.
             </summary>
         </member>
         <member name="M:MaterialDesignThemes.Wpf.ToggleButtonAssist.GetHasOnContent(System.Windows.DependencyObject)">

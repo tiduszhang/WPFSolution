@@ -132,7 +132,7 @@
             插件程序集集合
             </summary>
         </member>
-        <member name="M:PluginAPI.PluginHelper.LoadApplication">
+        <member name="M:PluginAPI.PluginHelper.LoadApplication(System.Collections.Generic.List{System.String})">
             <summary>
             初始化程序
             </summary>

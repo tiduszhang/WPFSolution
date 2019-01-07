@@ -73,7 +73,7 @@ namespace PluginAPI
                     }
                     catch (Exception ex)
                     {
-                        ex.ToString().WriteToLog(log4net.Core.Level.Error);
+                        ex.ToString().WriteToLog("", log4net.Core.Level.Error);
                     }
                 }
                 if (existModel != null)

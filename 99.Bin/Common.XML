@@ -312,39 +312,12 @@
             Logger
             </summary>
         </member>
-        <member name="T:Common.Logger.LogObject">
-            <summary>
-            日志对象
-            </summary>
-        </member>
-        <member name="P:Common.Logger.LogObject.ID">
-            <summary>
-            ID
-            </summary>
-        </member>
-        <member name="P:Common.Logger.LogObject.Log">
-            <summary>
-            日志类
-            </summary>
-        </member>
-        <member name="F:Common.Logger.logs">
-            <summary>
-            日志对象
-            </summary>
-        </member>
-        <member name="M:Common.Logger.WriteToLog(System.String,log4net.Core.Level)">
-            <summary>
-            写入日志 
-            </summary>
-            <param name="value"></param>
-            <param name="level"></param>
-        </member>
         <member name="M:Common.Logger.WriteToLog(System.String,System.String,log4net.Core.Level)">
             <summary>
             写入日志 
             </summary>
             <param name="value"></param>
-            <param name="key"></param>
+            <param name="path"></param>
             <param name="level"></param>
         </member>
         <member name="T:Common.ObjectTools">

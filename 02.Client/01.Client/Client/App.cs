@@ -61,12 +61,12 @@ namespace Client
         {
             try
             {
-                ("异步处理县城异常：《" + e.Exception.ToString() + "》").WriteToLog(log4net.Core.Level.Error);
+                ("异步处理县城异常：《" + e.Exception.ToString() + "》").WriteToLog("", log4net.Core.Level.Error);
                 e.SetObserved();
             }
             catch (Exception ex)
             {
-                ("不可恢复的异步处理县城异常：《" + ex.ToString() + "》").WriteToLog(log4net.Core.Level.Error);
+                ("不可恢复的异步处理县城异常：《" + ex.ToString() + "》").WriteToLog("", log4net.Core.Level.Error);
                 //MessageBox.Show("应用程序发生不可恢复的异常，将要退出！");
             }
         }
@@ -83,12 +83,12 @@ namespace Client
                 var exception = e.ExceptionObject as Exception;
                 if (exception != null)
                 {
-                    ("非UI线程全局异常" + exception.ToString()).WriteToLog(log4net.Core.Level.Error);
+                    ("非UI线程全局异常" + exception.ToString()).WriteToLog("", log4net.Core.Level.Error);
                 }
             }
             catch (Exception ex)
             {
-                ("不可恢复的非UI线程全局异常" + ex.ToString()).WriteToLog(log4net.Core.Level.Error);
+                ("不可恢复的非UI线程全局异常" + ex.ToString()).WriteToLog("", log4net.Core.Level.Error);
             }
         }
 
@@ -101,12 +101,12 @@ namespace Client
         {
             try
             {
-                ("UI线程全局异常：《" + e.Exception.ToString() + "》").WriteToLog(log4net.Core.Level.Error);
+                ("UI线程全局异常：《" + e.Exception.ToString() + "》").WriteToLog("", log4net.Core.Level.Error);
                 e.Handled = true;
             }
             catch (Exception ex)
             {
-                ("不可恢复的UI线程全局异常：《" + ex.ToString() + "》").WriteToLog(log4net.Core.Level.Error);
+                ("不可恢复的UI线程全局异常：《" + ex.ToString() + "》").WriteToLog("", log4net.Core.Level.Error);
                 //MessageBox.Show("应用程序发生不可恢复的异常，将要退出！");
             }
             //MessageBox.Show(e.Exception.ToString());
@@ -118,7 +118,7 @@ namespace Client
         /// <param name="e"></param>
         protected override void OnExit(ExitEventArgs e)
         {
-            ("程序退出").WriteToLog(log4net.Core.Level.Info);
+            ("程序退出").WriteToLog("", log4net.Core.Level.Info);
             base.OnExit(e);
         }
 
@@ -128,7 +128,7 @@ namespace Client
         /// <param name="e"></param>
         protected override void OnSessionEnding(SessionEndingCancelEventArgs e)
         {
-            ("当用户结束时发生 Windows 通过注销或关闭操作系统的会话。").WriteToLog(log4net.Core.Level.Info);
+            ("当用户结束时发生 Windows 通过注销或关闭操作系统的会话。").WriteToLog("", log4net.Core.Level.Info);
             base.OnSessionEnding(e);
         }
 
