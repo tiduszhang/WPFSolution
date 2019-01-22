@@ -39,9 +39,14 @@ namespace PluginAPI
             {
                 Directory.CreateDirectory(WorkPath.ExecPath);
             }
+
             var files = Directory.GetFiles(WorkPath.ExecPath, "*", SearchOption.AllDirectories)
-                .Where(file => ignorepaths.FirstOrDefault(ignorepath => file.ToLower().Contains(ignorepath.ToLower())) == null //排除第三方库不可识别的库
-                                 && file.ToLower().EndsWith(".dll".ToLower())).ToList();
+                .Where(file => file.ToLower().EndsWith(".dll".ToLower())).ToList();
+            if (ignorepaths != null)
+            { 
+                files = files.Where(file => ignorepaths.FirstOrDefault(ignorepath => file.ToLower().Contains(ignorepath.ToLower())) == null //排除第三方库不可识别的库
+                                    ).ToList();
+            }
             //var models = AppDomain.CurrentDomain.GetAssemblies();
             if (ApplicationAssembly == null)
             {
